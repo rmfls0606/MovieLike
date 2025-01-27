@@ -20,6 +20,8 @@ final class ProfileSetNickNameViewController: UIViewController {
     
     private func configure(){
         self.navigationItem.title = "프로필 설정"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
         self.view.backgroundColor = .black
         
         self.view.addSubview(profileSetNickNameView)

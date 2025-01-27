@@ -20,6 +20,7 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
     
     private func configure(){
         self.navigationItem.title = "프로필 이미지 설정"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         self.view.backgroundColor = .black
         self.view.addSubview(profileSelectImageView)

@@ -18,27 +18,9 @@
 		79F484512D4684A900EED722 /* MovieLike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieLike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		79F484632D4684AB00EED722 /* Exceptions for "MovieLike" folder in "MovieLike" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = 79F484502D4684A900EED722 /* MovieLike */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		7919FA762D47AC4400986441 /* Components */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Components;
-			sourceTree = "<group>";
-		};
 		79F484532D4684A900EED722 /* MovieLike */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				79F484632D4684AB00EED722 /* Exceptions for "MovieLike" folder in "MovieLike" target */,
-			);
 			path = MovieLike;
 			sourceTree = "<group>";
 		};
@@ -61,7 +43,6 @@
 		79F484482D4684A900EED722 = {
 			isa = PBXGroup;
 			children = (
-				7919FA762D47AC4400986441 /* Components */,
 				7919F9F02D47977000986441 /* .gitignore */,
 				79F484532D4684A900EED722 /* MovieLike */,
 				79F484522D4684A900EED722 /* Products */,
@@ -92,7 +73,6 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				7919FA762D47AC4400986441 /* Components */,
 				79F484532D4684A900EED722 /* MovieLike */,
 			);
 			name = MovieLike;
