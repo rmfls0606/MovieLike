@@ -30,6 +30,7 @@ final class ProfileImageView: BaseView {
         }
     }
     
+    // TODO: 사용하는 곳이 1곳 밖에 없으므로 해당 View로 빼기
     func randomImage(){
         let imageIndex = Int.random(in: 0...11)
         let imageName = "profile_\(imageIndex)"

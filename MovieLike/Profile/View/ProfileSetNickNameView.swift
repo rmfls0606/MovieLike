@@ -8,13 +8,14 @@
 import UIKit
 import SnapKit
 
-final class ProfileView: BaseView {
+final class ProfileSetNickNameView: BaseView {
         
     //MARK: - 뷰 정의
     //프로필 이미지
     private let profileImageButton = ProfileImageView()
     
     // TODO: 카메아 아이콘 더 작게 해보기
+    //카메라 아이콘
     private lazy var profileCameraIcon: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "camera.fill"), for: .normal)
@@ -107,7 +108,7 @@ final class ProfileView: BaseView {
     override func configureLayout() {
         //프로필 이미지
         self.profileImageButton.snp.makeConstraints { make in
-            make.top.equalToSuperview().offset(50)
+            make.top.equalToSuperview().offset(30)
             make.centerX.equalToSuperview()
             make.size.equalTo(100)
         }
