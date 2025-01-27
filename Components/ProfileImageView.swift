@@ -35,6 +35,7 @@ final class ProfileImageView: BaseView {
     }
     
     // TODO: 사용하는 곳이 1곳 밖에 없으므로 해당 View로 빼기
+    //랜덤 이미지 넣기
     func randomImage(){
         let imageIndex = Int.random(in: 0...11)
         let imageName = "profile_\(imageIndex)"
@@ -43,6 +44,12 @@ final class ProfileImageView: BaseView {
         self.profileImageButton.setImage(image, for: .highlighted)
         self.profileImageButton.alpha = 1.0
         self.profileImageButton.layer.borderWidth = 3.0
+    }
+    
+    //원하는 이미지 넣기
+    func selectImage(image: UIImage){
+        self.profileImageButton.setImage(image, for: .normal)
+        self.profileImageButton.setImage(image, for: .highlighted)
     }
     
     @objc

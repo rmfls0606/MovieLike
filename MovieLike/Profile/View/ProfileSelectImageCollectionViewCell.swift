@@ -7,6 +7,24 @@
 
 import UIKit
 
-class ProfileSelectImageCollectionViewCell: UICollectionViewCell {
+class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
+    static let identifier = "ProfileSelectImageCollectionViewCell"
     
+    private lazy var profileImageButton = ProfileImageView()
+    
+    override func configureHierarchy() {
+        self.addSubview(profileImageButton)
+    }
+    
+    override func configureLayout() {
+        
+    }
+    
+    override func configureView() {
+        
+    }
+    
+    func configure(image: UIImage){
+        self.profileImageButton.selectImage(image: image)
+    }
 }
