@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     static let identifier = "ProfileSelectImageCollectionViewCell"
@@ -17,7 +18,9 @@ class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureLayout() {
-        
+        profileImageButton.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+        }
     }
     
     override func configureView() {

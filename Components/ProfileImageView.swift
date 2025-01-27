@@ -15,7 +15,7 @@ final class ProfileImageView: BaseView {
         btn.layer.cornerRadius = 50
         btn.layer.masksToBounds = true
         btn.layer.borderWidth = 1.0
-        btn.layer.borderColor = UIColor(named: "blueColor")?.cgColor
+        btn.layer.borderColor = UIColor(named: "lightGrayColor")?.cgColor
         btn.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         btn.alpha = 0.5
         return btn
@@ -42,6 +42,7 @@ final class ProfileImageView: BaseView {
         let image = UIImage(named: imageName)
         self.profileImageButton.setImage(image, for: .normal)
         self.profileImageButton.setImage(image, for: .highlighted)
+        self.profileImageButton.layer.borderColor = UIColor(named: "blueColor")?.cgColor
         self.profileImageButton.alpha = 1.0
         self.profileImageButton.layer.borderWidth = 3.0
     }
