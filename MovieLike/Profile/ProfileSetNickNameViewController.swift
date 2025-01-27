@@ -8,8 +8,9 @@
 import UIKit
 import SnapKit
 
-final class ProfileSetNickNameViewController: UIViewController {
+final class ProfileSetNickNameViewController: UIViewController, UITextFieldDelegate {
     var defaultImageName: String?
+    private var nicknameStatus: NicknameResult = .rangeError
     
     private let profileSetNickNameView = ProfileSetNickNameView()
     override func viewDidLoad() {
@@ -26,6 +27,8 @@ final class ProfileSetNickNameViewController: UIViewController {
         
         self.view.addSubview(profileSetNickNameView)
         
+        self.profileSetNickNameView.configureTextFieldDelegate(delegate: self)
+        
         self.profileSetNickNameView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
@@ -37,5 +40,17 @@ final class ProfileSetNickNameViewController: UIViewController {
     func pushNextViewController(){
         let nextVC = ProfileSelectImageViewController()
         self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+}
+
+extension ProfileSetNickNameViewController{
+    func textFieldDidChangeSelection(_ textField: UITextField) {
+        guard let text = textField.text else{
+            self.nicknameStatus = .empty
+            self.profileSetNickNameView.configureNicknameStatusLabel(text: self.nicknameStatus.resultDescription)
+            return
+        }
+        self.nicknameStatus = nicknameStatus.nickNameIsValid(nickname: text)
+        self.profileSetNickNameView.configureNicknameStatusLabel(text: self.nicknameStatus.resultDescription)
     }
 }

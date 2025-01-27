@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
+final class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     static let identifier = "ProfileSelectImageCollectionViewCell"
     
     private lazy var profileImageButton = ProfileImageView()

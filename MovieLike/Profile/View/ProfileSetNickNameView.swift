@@ -76,7 +76,6 @@ final class ProfileSetNickNameView: BaseView {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(named: "blueColor")
-        label.text = "닉네임에 숫자는 포함할 수 없어요"
         return label
     }()
     
@@ -188,5 +187,13 @@ extension ProfileSetNickNameView{
     @objc
     private func profileCameraIconButtonTapped(){
         self.pushNextViewControllerClosure?()
+    }
+    
+    func configureTextFieldDelegate(delegate: UITextFieldDelegate){
+        self.nickNameTextField.delegate = delegate
+    }
+    
+    func configureNicknameStatusLabel(text: String){
+        self.nickNameStatusLabel.text = text
     }
 }
