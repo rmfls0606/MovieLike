@@ -13,6 +13,8 @@ final class ProfileView: BaseView {
     //MARK: - 뷰 정의
     //프로필 이미지
     private let profileImageButton = ProfileImageView()
+    
+    // TODO: 카메아 아이콘 더 작게 해보기
     private lazy var profileCameraIcon: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "camera.fill"), for: .normal)
@@ -73,10 +75,33 @@ final class ProfileView: BaseView {
         return label
     }()
     
+    //완료 버튼
+    private lazy var profileCompleteButton: UIButton = {
+        let button = UIButton(configuration: .filled())
+        
+        var config = UIButton.Configuration.filled()
+        config.baseBackgroundColor = .black
+        config.baseForegroundColor = UIColor(named: "blueColor")
+        config.cornerStyle = .capsule
+        config.background.strokeColor = UIColor(named: "blueColor")
+        config.background.strokeWidth = 2.0
+        config.contentInsets = NSDirectionalEdgeInsets(top: 12, leading: 0, bottom: 12, trailing: 0)
+        config.titleAlignment = .center
+        
+        var title = AttributedString("완료")
+        title.font = UIFont.systemFont(ofSize: 16, weight: .bold)
+        config.attributedTitle = title
+        
+        button.configuration = config
+        
+        return button
+    }()
+    
     override func configureHierarchy() {
         self.addSubview(profileImageButton)
         self.addSubview(profileCameraIcon)
         self.addSubview(nickNameStackView)
+        self.addSubview(profileCompleteButton)
     }
     
     override func configureLayout() {
@@ -130,6 +155,13 @@ final class ProfileView: BaseView {
         
         //닉네임 상태 레이블
         self.nickNameStatusLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(10)
+            make.trailing.equalToSuperview().offset(-10)
+        }
+        
+        //프로필 완료 버튼
+        self.profileCompleteButton.snp.makeConstraints { make in
+            make.top.equalTo(nickNameStackView.snp.bottom).offset(24)
             make.leading.equalToSuperview().offset(10)
             make.trailing.equalToSuperview().offset(-10)
         }
