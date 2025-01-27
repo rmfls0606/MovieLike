@@ -9,7 +9,10 @@ import UIKit
 import SnapKit
 
 final class ProfileSetNickNameView: BaseView {
-        
+    
+    //MARK: - ViewController에서 부터 push하는 함수 받아오기
+    var pushNextViewControllerClosure: (() -> Void)?
+    
     //MARK: - 뷰 정의
     //프로필 이미지
     private let profileImageButton = ProfileImageView()
@@ -24,6 +27,7 @@ final class ProfileSetNickNameView: BaseView {
         btn.backgroundColor = UIColor(named: "blueColor")
         btn.layer.cornerRadius = 15
         btn.layer.masksToBounds = true
+        btn.addTarget(self, action: #selector(profileCameraIconButtonTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -171,5 +175,18 @@ final class ProfileSetNickNameView: BaseView {
     
     override func configureView() {
         self.profileImageButton.randomImage()
+//        닉네임 설정 화면에서 버튼을 눌렀을 때 실행되는 함수
+        self.profileImageButton.buttonTappedClosure = {[weak self] in
+            self?.pushNextViewControllerClosure?()
+        }
+    }
+}
+
+extension ProfileSetNickNameView{
+    
+    //MARK: - 카메라 아이콘을 선택했을 때
+    @objc
+    private func profileCameraIconButtonTapped(){
+        self.pushNextViewControllerClosure?()
     }
 }

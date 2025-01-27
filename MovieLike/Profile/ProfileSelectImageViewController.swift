@@ -18,6 +18,8 @@ final class ProfileSelectImageViewController: UIViewController {
     }
     
     private func configure(){
+        self.navigationItem.title = "프로필 이미지 설정"
+        
         self.view.backgroundColor = .black
         self.view.addSubview(profileSelectImageView)
         

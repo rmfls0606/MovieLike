@@ -9,6 +9,8 @@ import UIKit
 import SnapKit
 
 final class ProfileSetNickNameViewController: UIViewController {
+    var defaultImageName: String?
+    
     private let profileSetNickNameView = ProfileSetNickNameView()
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,5 +28,12 @@ final class ProfileSetNickNameViewController: UIViewController {
             make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.equalToSuperview()
         }
+        
+        profileSetNickNameView.pushNextViewControllerClosure = self.pushNextViewController
+    }
+    
+    func pushNextViewController(){
+        let nextVC = ProfileSelectImageViewController()
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

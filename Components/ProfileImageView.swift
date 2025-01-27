@@ -16,9 +16,13 @@ final class ProfileImageView: BaseView {
         btn.layer.masksToBounds = true
         btn.layer.borderWidth = 1.0
         btn.layer.borderColor = UIColor(named: "blueColor")?.cgColor
+        btn.addTarget(self, action: #selector(buttonTapped), for: .touchUpInside)
         btn.alpha = 0.5
         return btn
     }()
+    
+    //클로저를 이용하여 액션 전달
+    var buttonTappedClosure: (() -> Void)?
     
     override func configureHierarchy() {
         self.addSubview(profileImageButton)
@@ -41,4 +45,8 @@ final class ProfileImageView: BaseView {
         self.profileImageButton.layer.borderWidth = 3.0
     }
     
+    @objc
+    private func buttonTapped() {
+        buttonTappedClosure?()
+    }
 }

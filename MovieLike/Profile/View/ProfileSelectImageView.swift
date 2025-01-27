@@ -27,6 +27,7 @@ final class ProfileSelectImageView: BaseView {
     
     override func configureHierarchy() {
         self.addSubview(profileSelectedImage)
+        self.addSubview(profileSelectedCameraIcon)
     }
     
     override func configureLayout() {
