@@ -18,7 +18,7 @@ final class ProfileSetViewController: UIViewController {
     
     private func configure(){
         self.navigationItem.title = "프로필 설정"
-        self.view.backgroundColor = .white
+        self.view.backgroundColor = .black
         
         self.view.addSubview(profileView)
         
