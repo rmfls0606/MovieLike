@@ -12,6 +12,7 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
     
     private let profileSelectImageView = ProfileSelectImageView()
     private var selectedIndexPath: IndexPath?
+    var selectedImage: UIImage?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,6 +27,9 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
         self.view.backgroundColor = .black
         self.view.addSubview(profileSelectImageView)
         self.profileSelectImageView.configureDelegate(delegate: self, dataSource: self)
+        if let selectedImage = self.selectedImage{
+            self.profileSelectImageView.selectedProfileImage(image: selectedImage)
+        }
         
         profileSelectImageView.snp.makeConstraints { make in
             make.top.bottom.equalTo(self.view.safeAreaLayoutGuide)
@@ -67,6 +71,7 @@ extension ProfileSelectImageViewController{
             currentCell.selectItem = true
             currentCell.configureBorderColor()
         }
+        NotificationCenter.default.post(name: Notification.Name("profileImage"), object: UIImage(named: imageName))
         
         self.selectedIndexPath = indexPath
     }

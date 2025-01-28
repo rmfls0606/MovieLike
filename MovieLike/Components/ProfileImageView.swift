@@ -10,7 +10,7 @@ import UIKit
 final class ProfileImageView: BaseView {
 
     //MARK: - 뷰 정의
-    private lazy var profileImageButton: UIButton = {
+    private(set) lazy var profileImageButton: UIButton = {
         let btn = UIButton()
         btn.layer.cornerRadius = 50
         btn.layer.masksToBounds = true

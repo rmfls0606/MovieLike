@@ -15,7 +15,7 @@ final class ProfileSetNickNameView: BaseView {
     
     //MARK: - 뷰 정의
     //프로필 이미지
-    private let profileImageButton = ProfileImageView()
+    private(set) var profileImageButton = ProfileImageView()
     
     // TODO: 카메아 아이콘 더 작게 해보기
     //카메라 아이콘
@@ -101,6 +101,11 @@ final class ProfileSetNickNameView: BaseView {
         return button
     }()
     
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        configureNotificationObserver()
+    }
+    
     override func configureHierarchy() {
         self.addSubview(profileImageButton)
         self.addSubview(profileCameraIcon)
@@ -179,6 +184,10 @@ final class ProfileSetNickNameView: BaseView {
             self?.pushNextViewControllerClosure?()
         }
     }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self, name: Notification.Name("profileImage"), object: nil)
+    }
 }
 
 extension ProfileSetNickNameView{
@@ -195,5 +204,16 @@ extension ProfileSetNickNameView{
     
     func configureNicknameStatusLabel(text: String){
         self.nickNameStatusLabel.text = text
+    }
+    
+    private func configureNotificationObserver(){
+        NotificationCenter.default.addObserver(self, selector: #selector(updateProfileImage(_:)), name: Notification.Name("profileImage"), object: nil)
+    }
+    
+    @objc
+    private func updateProfileImage(_ notification: Notification){
+        if let image = notification.object as? UIImage{
+            self.profileImageButton.selectImage(image: image)
+        }
     }
 }
