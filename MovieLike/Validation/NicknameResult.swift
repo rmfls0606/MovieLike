@@ -14,6 +14,7 @@ enum NicknameResult {
     case incorrectCharacterError
     case numberError
     
+    // TODO: 앞 뒤 공백 처리하기
     func nickNameIsValid(nickname: String) -> NicknameResult{
         if nickname.isEmpty{
             return .empty

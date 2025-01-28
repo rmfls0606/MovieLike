@@ -11,7 +11,17 @@ import SnapKit
 final class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     static let identifier = "ProfileSelectImageCollectionViewCell"
     
-    private lazy var profileImageButton = ProfileImageView()
+    var selectItem: Bool = false
+    
+    private lazy var profileImageButton: UIImageView = {
+        let view = UIImageView()
+        view.layer.cornerRadius = 50
+        view.layer.masksToBounds = true
+        view.layer.borderWidth = 1.0
+        view.layer.borderColor = UIColor(named: "lightGrayColor")?.cgColor
+        view.alpha = 0.5
+        return view
+    }()
     
     override func configureHierarchy() {
         self.addSubview(profileImageButton)
@@ -28,6 +38,12 @@ final class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     }
     
     func configure(image: UIImage){
-        self.profileImageButton.selectImage(image: image)
+        self.profileImageButton.image = image
+    }
+    
+    func configureBorderColor(){
+        self.profileImageButton.layer.borderWidth = selectItem ? 3.0 : 1.0
+        self.profileImageButton.layer.borderColor = selectItem ? UIColor(named: "blueColor")?.cgColor : UIColor(named: "lightGrayColor")?.cgColor
+        self.profileImageButton.alpha = selectItem ? 1.0 : 0.5
     }
 }

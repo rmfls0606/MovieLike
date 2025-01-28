@@ -53,6 +53,15 @@ final class ProfileImageView: BaseView {
         self.profileImageButton.setImage(image, for: .highlighted)
     }
     
+    //사용자가 선택한 이미지를 상단 프로필 이미지로 보여주는 함수
+    func selectedProfileImage(image: UIImage){
+        self.profileImageButton.setImage(image, for: .normal)
+        self.profileImageButton.setImage(image, for: .highlighted)
+        self.profileImageButton.layer.borderColor = UIColor(named: "blueColor")?.cgColor
+        self.profileImageButton.alpha = 1.0
+        self.profileImageButton.layer.borderWidth = 3.0
+    }
+    
     @objc
     private func buttonTapped() {
         buttonTappedClosure?()

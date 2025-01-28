@@ -11,10 +11,11 @@ import SnapKit
 final class ProfileSelectImageViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     
     private let profileSelectImageView = ProfileSelectImageView()
-
+    private var selectedIndexPath: IndexPath?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configure()
     }
     
@@ -44,7 +45,29 @@ extension ProfileSelectImageViewController{
         }
         if let image = UIImage(named: "profile_\(indexPath.item)"){
             cell.configure(image: image)
+            cell.selectItem = indexPath == selectedIndexPath
+            cell.configureBorderColor()
         }
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let imageName = "profile_\(indexPath.item)"
+        if let image = UIImage(named: imageName){
+            profileSelectImageView.selectedProfileImage(image: image)
+        }
+        
+        if let prevIndexPath = selectedIndexPath,
+           let previousCell = collectionView.cellForItem(at: prevIndexPath) as? ProfileSelectImageCollectionViewCell {
+            previousCell.selectItem = false
+            previousCell.configureBorderColor()
+        }
+        
+        if let currentCell = collectionView.cellForItem(at: indexPath) as? ProfileSelectImageCollectionViewCell {
+            currentCell.selectItem = true
+            currentCell.configureBorderColor()
+        }
+        
+        self.selectedIndexPath = indexPath
     }
 }

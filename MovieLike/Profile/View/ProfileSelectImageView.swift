@@ -86,4 +86,8 @@ final class ProfileSelectImageView: BaseView {
         self.collectionView.delegate = delegate
         self.collectionView.dataSource = dataSource
     }
+    
+    func selectedProfileImage(image: UIImage){
+        self.profileSelectedImage.selectedProfileImage(image: image)
+    }
 }
