@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class MainViewController: UIViewController {
+final class MainViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     private let userProfieView = UserProfileView()
     private let recentSearchView = RecentSearchView()
     
@@ -31,6 +31,7 @@ final class MainViewController: UIViewController {
         
         self.view.addSubview(userProfieView)
         self.view.addSubview(recentSearchView)
+        self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
         
         
         userProfieView.snp.makeConstraints { make in
@@ -43,6 +44,22 @@ final class MainViewController: UIViewController {
         recentSearchView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(userProfieView.snp.bottom).offset(12)
+            make.bottom.equalToSuperview()
         }
+    }
+}
+
+extension MainViewController{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        10
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.identifier, for: indexPath) as? RecentSearchCollectionViewCell else{
+            return UICollectionViewCell()
+        }
+        
+        cell.configureText(text: "킁킁")
+        return cell
     }
 }
