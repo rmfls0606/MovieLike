@@ -19,7 +19,17 @@ final class MainViewController: UIViewController {
     
     private func configure(){
         self.view.backgroundColor = .black
+        
+        self.navigationItem.title = "MovieLike"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: nil)
+        rightBarButton.tintColor = UIColor(named: "blueColor")
+        
+        self.navigationItem.rightBarButtonItem = rightBarButton
+        
         self.view.addSubview(userProfieView)
+        
         
         userProfieView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide).offset(12)
