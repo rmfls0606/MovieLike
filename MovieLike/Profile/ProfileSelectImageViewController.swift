@@ -50,6 +50,7 @@ extension ProfileSelectImageViewController{
         if let image = UIImage(named: "profile_\(indexPath.item)"){
             cell.configure(image: image)
             cell.selectItem = indexPath == selectedIndexPath
+            cell.profileImageButton.layer.cornerRadius = cell.frame.width / 2
             cell.configureBorderColor()
         }
         return cell
@@ -71,6 +72,7 @@ extension ProfileSelectImageViewController{
             currentCell.selectItem = true
             currentCell.configureBorderColor()
         }
+        
         NotificationCenter.default.post(name: Notification.Name("profileImage"), object: UIImage(named: imageName))
         
         self.selectedIndexPath = indexPath

@@ -13,9 +13,8 @@ final class ProfileSelectImageCollectionViewCell: BaseCollectionViewCell {
     
     var selectItem: Bool = false
     
-    private lazy var profileImageButton: UIImageView = {
+    private(set) lazy var profileImageButton: UIImageView = {
         let view = UIImageView()
-        view.layer.cornerRadius = 50
         view.layer.masksToBounds = true
         view.layer.borderWidth = 1.0
         view.layer.borderColor = UIColor(named: "lightGrayColor")?.cgColor
