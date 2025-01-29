@@ -11,6 +11,7 @@ import SnapKit
 final class MainViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
     private let userProfieView = UserProfileView()
     private let recentSearchView = RecentSearchView()
+    private let todayMovieView = TodayMovieView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,9 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.view.addSubview(recentSearchView)
         self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
         
+        self.view.addSubview(todayMovieView)
+        self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
+        
         
         userProfieView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide).offset(12)
@@ -44,7 +48,14 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         recentSearchView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(userProfieView.snp.bottom).offset(12)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(recentSearchView.recentSearchCollectionView.snp.bottom)
+        }
+        
+        todayMovieView.snp.makeConstraints { make in
+            make.top.equalTo(recentSearchView.snp.bottom).offset(12)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
 }
@@ -55,11 +66,20 @@ extension MainViewController{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.identifier, for: indexPath) as? RecentSearchCollectionViewCell else{
-            return UICollectionViewCell()
+        if collectionView.tag == 0{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecentSearchCollectionViewCell.identifier, for: indexPath) as? RecentSearchCollectionViewCell else{
+                return UICollectionViewCell()
+            }
+            
+            cell.configureText(text: "킁킁")
+            return cell
+        }else if collectionView.tag == 1{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayMovieCollectionViewCell.identifier, for: indexPath) as? TodayMovieCollectionViewCell else{
+                return UICollectionViewCell()
+            }
+            
+            return cell
         }
-        
-        cell.configureText(text: "킁킁")
-        return cell
+        return UICollectionViewCell()
     }
 }

@@ -51,7 +51,7 @@ final class UserProfileView: BaseView {
         let view = UIImageView()
         view.image = UIImage(named: "profile0")
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 25
+        view.layer.cornerRadius = 30
         view.layer.masksToBounds = true
         view.layer.borderWidth = 3.0
         view.layer.borderColor = UIColor(named: "blueColor")?.cgColor
@@ -119,7 +119,7 @@ final class UserProfileView: BaseView {
         self.userProfileImageView.snp.makeConstraints { make in
             make.top.bottom.equalToSuperview()
             make.leading.equalToSuperview()
-            make.size.equalTo(50)
+            make.size.equalTo(60)
         }
         
         self.userInfoView.snp.makeConstraints { make in

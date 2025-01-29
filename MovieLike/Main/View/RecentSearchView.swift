@@ -31,7 +31,7 @@ final class RecentSearchView: BaseView {
     }()
     
     //최근 검색어 컬렉션 뷰
-    private lazy var recentSearchCollectionView: UICollectionView = {
+    private(set) lazy var recentSearchCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 6
@@ -40,6 +40,7 @@ final class RecentSearchView: BaseView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.backgroundColor = .clear
+        collectionView.tag = 0
         collectionView.register(RecentSearchCollectionViewCell.self, forCellWithReuseIdentifier: RecentSearchCollectionViewCell.identifier)
         return collectionView
     }()
