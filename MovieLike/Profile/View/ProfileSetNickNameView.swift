@@ -48,13 +48,14 @@ final class ProfileSetNickNameView: BaseView {
     }()
     
     //닉네임
-    private lazy var nickNameTextField: UITextField = {
+    private(set) lazy var nickNameTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "닉네임을 입력해주세요"
         textField.attributedPlaceholder = NSAttributedString(string: textField.placeholder!, attributes: [.foregroundColor: UIColor.white])
         textField.borderStyle = .none
         textField.textColor = .white
         textField.font = UIFont.systemFont(ofSize: 14)
+        textField.becomeFirstResponder()
         return textField
     }()
     
@@ -221,7 +222,13 @@ extension ProfileSetNickNameView{
     
     @objc
     private func completeButtonTapped(){
-        let user = User(imageName: self.profileImageButton.profileImageButton.accessibilityIdentifier!, nickname: self.nickNameTextField.text!, joinDate: Date())
+        let joinDate = DateFormatterManager.shared.formatDate(Date())
+        let user = User(imageName: self.profileImageButton.profileImageButton.accessibilityIdentifier!, nickname: self.nickNameTextField.text!, joinDate: joinDate)
         self.completeNickNameClosure?(user)
+    }
+    
+    func configureUserDate(user: User){
+        self.profileImageButton.selectImage(imageName: user.imageName)
+        self.nickNameTextField.text = user.nickname
     }
 }

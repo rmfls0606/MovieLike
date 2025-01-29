@@ -17,11 +17,11 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         
         configure()
+        print("A")
     }
     
     private func configure(){
         self.view.backgroundColor = .black
-        
         self.navigationItem.title = "MovieLike"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
@@ -31,6 +31,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.navigationItem.rightBarButtonItem = rightBarButton
         
         self.view.addSubview(userProfieView)
+        userProfieView.onTapGesureClosure = presentViewController
         self.view.addSubview(recentSearchView)
         self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
         
@@ -57,6 +58,16 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
             make.trailing.equalToSuperview()
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
+    }
+    
+    private func presentViewController(){
+        let presentVC = ProfileSetNickNameViewController()
+        presentVC.editMode = true
+        presentVC.onDataUpdated = { [weak self] newData in
+            self?.userProfieView.configureData(user: newData)
+        }
+        let navigationVC = UINavigationController(rootViewController: presentVC)
+        self.present(navigationVC, animated: true)
     }
 }
 

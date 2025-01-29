@@ -34,7 +34,7 @@ enum NicknameResult {
         case .success:
             return "사용할 수 있는 닉네임이에요"
         case .empty:
-            return ""
+            return "닉네임을 입력해주세요."
         case .rangeError:
             return "2글자 이상 10글자 미만으로 설정해 주세요"
         case .incorrectCharacterError:

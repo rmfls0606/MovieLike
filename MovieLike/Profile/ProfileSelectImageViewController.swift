@@ -13,6 +13,7 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
     private let profileSelectImageView = ProfileSelectImageView()
     private var selectedIndexPath: IndexPath?
     var selectedImageName: String?
+    var editMode: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +22,11 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
     }
     
     private func configure(){
-        self.navigationItem.title = "프로필 이미지 설정"
+        if editMode{
+            self.navigationItem.title = "프로필 이미지 편집"
+        }else{
+            self.navigationItem.title = "프로필 이미지 설정"
+        }
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         self.view.backgroundColor = .black

@@ -8,6 +8,9 @@
 import UIKit
 
 final class UserProfileView: BaseView {
+    var onTapGesureClosure: (() -> Void)?
+    private let user = UserManager.shared.getUserInfo()
+    
     //MARK: - 뷰 정의
     //사용자 프로필 정보 뷰
     private(set) lazy var userProfileView: UIView = {
@@ -17,6 +20,7 @@ final class UserProfileView: BaseView {
         view.backgroundColor = UIColor(named: "darkGrayColor")
         view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
+        view.gestureRecognizers = [UITapGestureRecognizer(target: self, action: #selector(userProfileViewTapped))]
         return view
     }()
     
@@ -49,7 +53,6 @@ final class UserProfileView: BaseView {
     //사용자 프로필 이미지
     private lazy var userProfileImageView: UIImageView = {
         let view = UIImageView()
-        view.image = UIImage(named: "profile0")
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 30
         view.layer.masksToBounds = true
@@ -62,7 +65,6 @@ final class UserProfileView: BaseView {
     //사용자 닉네임
     private lazy var userNicknameLabel: UILabel = {
         let label = UILabel()
-        label.text = "닉네임"
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .white
         return label
@@ -71,7 +73,6 @@ final class UserProfileView: BaseView {
     //사용자 가입날짜
     private lazy var userJoinDate: UILabel = {
         let label = UILabel()
-        label.text = "2025.01.28"
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(named: "lightGrayColor")
         return label
@@ -162,6 +163,19 @@ final class UserProfileView: BaseView {
     }
     
     override func configureView() {
-        
+        self.userProfileImageView.image = UIImage(named: self.user.imageName)
+        self.userNicknameLabel.text = self.user.nickname
+        self.userJoinDate.text = "\(self.user.joinDate) 가입"
+    }
+    
+    @objc
+    private func userProfileViewTapped(){
+        self.onTapGesureClosure?()
+    }
+    
+    func configureData(user: User){
+        self.userProfileImageView.image = UIImage(named: user.imageName)
+        self.userNicknameLabel.text = user.nickname
+        self.userJoinDate.text = "\(user.joinDate) 가입"
     }
 }

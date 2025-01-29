@@ -10,7 +10,7 @@ import Foundation
 struct User{
     let imageName: String
     let nickname: String
-    let joinDate: Date
+    let joinDate: String
 }
 
 class UserManager{
@@ -26,8 +26,22 @@ class UserManager{
     func saveUserInfo(user: User){
         defaults.set(user.imageName, forKey: userImageKey)
         defaults.set(user.nickname, forKey: userNicknameKey)
-        let joinDate = DateFormatterManager.shared.formatDate(user.joinDate)
         defaults.set(user.joinDate, forKey: userJoinDateKey)
-        defaults.set(true, forKey: "isOnboarding")
+    }
+    
+    func saveOnBoarding(){
+        defaults.set(true, forKey: "onBoarding")
+    }
+    
+    func getUserInfo() -> User{
+        let imageName = defaults.string(forKey: userImageKey)
+        let nickName = defaults.string(forKey: userNicknameKey)
+        let userJoinDate = defaults.string(forKey: userJoinDateKey)
+        
+        return User(imageName: imageName!, nickname: nickName!, joinDate: userJoinDate!)
+    }
+    
+    func getJoinDate() -> String{
+        return defaults.string(forKey: userJoinDateKey)!
     }
 }
