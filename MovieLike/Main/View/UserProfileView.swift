@@ -7,10 +7,10 @@
 
 import UIKit
 
-class UserProfileView: BaseView {
+final class UserProfileView: BaseView {
     //MARK: - 뷰 정의
     //사용자 프로필 정보 뷰
-    private lazy var userProfileView: UIView = {
+    private(set) lazy var userProfileView: UIView = {
         let view = UIView()
         view.addSubview(userProfileInnerView)
         view.addSubview(userSavedMovieBoxLabel)
@@ -113,7 +113,7 @@ class UserProfileView: BaseView {
             make.top.equalToSuperview().offset(12)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-12)
-            make.height.equalTo(50)
+            make.bottom.equalTo(userProfileImageView.snp.bottom)
         }
         
         self.userProfileImageView.snp.makeConstraints { make in
@@ -126,7 +126,6 @@ class UserProfileView: BaseView {
             make.centerY.equalToSuperview()
             make.leading.equalTo(userProfileImageView.snp.trailing).offset(6)
             make.trailing.equalTo(rightArrowIcon.snp.leading).offset(-6)
-            make.height.equalTo(50)
         }
         
         self.userInfoCenterYView.snp.makeConstraints { make in
