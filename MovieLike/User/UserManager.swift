@@ -10,7 +10,7 @@ import Foundation
 struct User{
     let imageName: String
     let nickname: String
-    let joinDate: String
+    let joinDate: Date
 }
 
 class UserManager{
@@ -26,6 +26,7 @@ class UserManager{
     func saveUserInfo(user: User){
         defaults.set(user.imageName, forKey: userImageKey)
         defaults.set(user.nickname, forKey: userNicknameKey)
+        let joinDate = DateFormatterManager.shared.formatDate(user.joinDate)
         defaults.set(user.joinDate, forKey: userJoinDateKey)
     }
 }

@@ -12,6 +12,7 @@ final class ProfileSetNickNameView: BaseView {
     
     //MARK: - ViewController에서 부터 push하는 함수 받아오기
     var pushNextViewControllerClosure: (() -> Void)?
+    var completeNickNameClosure: ((User) -> Void)?
     
     //MARK: - 뷰 정의
     //프로필 이미지
@@ -80,7 +81,7 @@ final class ProfileSetNickNameView: BaseView {
     }()
     
     //완료 버튼
-    private lazy var profileCompleteButton: UIButton = {
+    private(set) lazy var profileCompleteButton: UIButton = {
         let button = UIButton(configuration: .filled())
         
         var config = UIButton.Configuration.filled()
@@ -97,6 +98,7 @@ final class ProfileSetNickNameView: BaseView {
         config.attributedTitle = title
         
         button.configuration = config
+        button.addTarget(self, action: #selector(completeButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -212,8 +214,14 @@ extension ProfileSetNickNameView{
     
     @objc
     private func updateProfileImage(_ notification: Notification){
-        if let image = notification.object as? UIImage{
-            self.profileImageButton.selectImage(image: image)
+        if let imageName = notification.object as? String{
+            self.profileImageButton.selectImage(imageName: imageName)
         }
+    }
+    
+    @objc
+    private func completeButtonTapped(){
+        let user = User(imageName: self.profileImageButton.profileImageButton.accessibilityIdentifier!, nickname: self.nickNameTextField.text!, joinDate: Date())
+        self.completeNickNameClosure?(user)
     }
 }

@@ -12,7 +12,7 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
     
     private let profileSelectImageView = ProfileSelectImageView()
     private var selectedIndexPath: IndexPath?
-    var selectedImage: UIImage?
+    var selectedImageName: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,8 +27,8 @@ final class ProfileSelectImageViewController: UIViewController, UICollectionView
         self.view.backgroundColor = .black
         self.view.addSubview(profileSelectImageView)
         self.profileSelectImageView.configureDelegate(delegate: self, dataSource: self)
-        if let selectedImage = self.selectedImage{
-            self.profileSelectImageView.selectedProfileImage(image: selectedImage)
+        if let selectedImageName = self.selectedImageName{
+            self.profileSelectImageView.selectedProfileImage(imageName: selectedImageName)
         }
         
         profileSelectImageView.snp.makeConstraints { make in
@@ -58,9 +58,7 @@ extension ProfileSelectImageViewController{
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let imageName = "profile_\(indexPath.item)"
-        if let image = UIImage(named: imageName){
-            profileSelectImageView.selectedProfileImage(image: image)
-        }
+        profileSelectImageView.selectedProfileImage(imageName: imageName)
         
         if let prevIndexPath = selectedIndexPath,
            let previousCell = collectionView.cellForItem(at: prevIndexPath) as? ProfileSelectImageCollectionViewCell {
@@ -73,7 +71,7 @@ extension ProfileSelectImageViewController{
             currentCell.configureBorderColor()
         }
         
-        NotificationCenter.default.post(name: Notification.Name("profileImage"), object: UIImage(named: imageName))
+        NotificationCenter.default.post(name: Notification.Name("profileImage"), object: imageName)
         
         self.selectedIndexPath = indexPath
     }

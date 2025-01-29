@@ -18,7 +18,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let isOnboarding = UserDefaults.standard.bool(forKey: "isOnboarding")
         if isOnboarding{
-            window?.rootViewController = UINavigationController(rootViewController: ProfileSetNickNameViewController())
+            window?.rootViewController = UINavigationController(rootViewController: MainViewController())
         }else{
             window?.rootViewController = UINavigationController(rootViewController: OnBoardingViewController())
         }

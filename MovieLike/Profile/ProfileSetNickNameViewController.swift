@@ -37,10 +37,15 @@ final class ProfileSetNickNameViewController: UIViewController, UITextFieldDeleg
         profileSetNickNameView.pushNextViewControllerClosure = self.pushNextViewController
     }
     
-    func pushNextViewController(){
+    private func pushNextViewController(){
         let nextVC = ProfileSelectImageViewController()
-        nextVC.selectedImage = profileSetNickNameView.profileImageButton.profileImageButton.currentImage
+        nextVC.selectedImageName = profileSetNickNameView.profileImageButton.profileImageButton.accessibilityIdentifier
         self.navigationController?.pushViewController(nextVC, animated: true)
+    }
+    
+    private func completePushViewController(user: User){
+        
+        
     }
 }
 

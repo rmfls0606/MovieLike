@@ -45,21 +45,26 @@ final class ProfileImageView: BaseView {
         self.profileImageButton.layer.borderColor = UIColor(named: "blueColor")?.cgColor
         self.profileImageButton.alpha = 1.0
         self.profileImageButton.layer.borderWidth = 3.0
+        self.profileImageButton.accessibilityIdentifier = imageName
     }
     
     //원하는 이미지 넣기
-    func selectImage(image: UIImage){
-        self.profileImageButton.setImage(image, for: .normal)
-        self.profileImageButton.setImage(image, for: .highlighted)
+    func selectImage(imageName: String){
+        let profileImage = UIImage(named: imageName)
+        self.profileImageButton.setImage(profileImage, for: .normal)
+        self.profileImageButton.setImage(profileImage, for: .highlighted)
+        self.profileImageButton.accessibilityIdentifier = imageName
     }
     
     //사용자가 선택한 이미지를 상단 프로필 이미지로 보여주는 함수
-    func selectedProfileImage(image: UIImage){
-        self.profileImageButton.setImage(image, for: .normal)
-        self.profileImageButton.setImage(image, for: .highlighted)
+    func selectedProfileImage(imageName: String){
+        let profileImage = UIImage(named: imageName)
+        self.profileImageButton.setImage(profileImage, for: .normal)
+        self.profileImageButton.setImage(profileImage, for: .highlighted)
         self.profileImageButton.layer.borderColor = UIColor(named: "blueColor")?.cgColor
         self.profileImageButton.alpha = 1.0
         self.profileImageButton.layer.borderWidth = 3.0
+        self.profileImageButton.accessibilityIdentifier = imageName
     }
     
     @objc
