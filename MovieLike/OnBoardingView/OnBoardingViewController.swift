@@ -21,10 +21,18 @@ final class OnBoardingViewController: UIViewController {
     private func configure(){
         self.view.backgroundColor = .black
         self.view.addSubview(onboardingView)
+        onboardingView.onButtonTapped = { [weak self] in
+            self?.startButtonTapped()
+        }
         
         self.onboardingView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.trailing.bottom.equalToSuperview()
         }
+    }
+    
+    private func startButtonTapped(){
+        let nextVc = ProfileSetNickNameViewController()
+        self.navigationController?.pushViewController(nextVc, animated: true)
     }
 }

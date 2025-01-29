@@ -10,6 +10,8 @@ import SnapKit
 
 final class OnBoardingView: BaseView {
     
+    var onButtonTapped: (() -> Void)?
+    
     private lazy var onboardingImageView: UIImageView = {
         let view = UIImageView()
         view.image = UIImage(named: "onboarding")
@@ -54,6 +56,7 @@ final class OnBoardingView: BaseView {
         config.attributedTitle = title
         
         button.configuration = config
+        button.addTarget(self, action: #selector(startButtonTapped), for: .touchUpInside)
         
         return button
     }()
@@ -90,5 +93,10 @@ final class OnBoardingView: BaseView {
     
     override func configureView() {
         
+    }
+    
+    @objc
+    private func startButtonTapped(_ sender: UIButton){
+        self.onButtonTapped?()
     }
 }
