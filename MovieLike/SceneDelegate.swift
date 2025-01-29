@@ -16,9 +16,22 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: windowScene)
         
+        let firstVC = UINavigationController(rootViewController: MainViewController())
+        
+        let tabBarController = UITabBarController()
+        tabBarController.setViewControllers([firstVC], animated: true)
+        
+        if let items = tabBarController.tabBar.items {
+            items[0].selectedImage = UIImage(systemName: "popcorn")
+            items[0].image = UIImage(systemName: "popcorn")
+            items[0].title = "CENEMA"
+        }
+        
+        tabBarController.tabBar.tintColor = UIColor(named: "blueColor")
+        
         let isOnboarding = UserDefaults.standard.bool(forKey: "isOnboarding")
         if isOnboarding{
-            window?.rootViewController = UINavigationController(rootViewController: MainViewController())
+            window?.rootViewController = UINavigationController(rootViewController: tabBarController)
         }else{
             window?.rootViewController = UINavigationController(rootViewController: OnBoardingViewController())
         }

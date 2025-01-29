@@ -28,5 +28,6 @@ class UserManager{
         defaults.set(user.nickname, forKey: userNicknameKey)
         let joinDate = DateFormatterManager.shared.formatDate(user.joinDate)
         defaults.set(user.joinDate, forKey: userJoinDateKey)
+        defaults.set(true, forKey: "isOnboarding")
     }
 }

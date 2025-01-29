@@ -20,6 +20,7 @@ final class ProfileSetNickNameViewController: UIViewController, UITextFieldDeleg
     }
     
     private func configure(){
+        // TODO: 시작하자마 텍스트필드 선택하게 하기
         self.navigationItem.title = "프로필 설정"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
@@ -35,6 +36,7 @@ final class ProfileSetNickNameViewController: UIViewController, UITextFieldDeleg
         }
         
         profileSetNickNameView.pushNextViewControllerClosure = self.pushNextViewController
+        profileSetNickNameView.completeNickNameClosure = self.completePushViewController
     }
     
     private func pushNextViewController(){
@@ -43,9 +45,21 @@ final class ProfileSetNickNameViewController: UIViewController, UITextFieldDeleg
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
     
-    private func completePushViewController(user: User){
-        
-        
+    private func completePushViewController(_ user: User){
+        if nicknameStatus == .success{
+            UserManager.shared.saveUserInfo(user: user)
+            
+            guard let sceneDelgate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else{
+                return
+            }
+            
+            let newVC = MainViewController()
+            sceneDelgate.window?.rootViewController = newVC
+            sceneDelgate.window?.makeKeyAndVisible()
+            
+        }else{
+            // TODO: alert으로 알려주기
+        }
     }
 }
 
