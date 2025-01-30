@@ -74,7 +74,7 @@ final class ProfileSetNickNameViewController: UIViewController, UITextFieldDeleg
                 return
             }
             
-            let newVC = MainViewController()
+            let newVC = AppTabBarController()
             sceneDelgate.window?.rootViewController = newVC
             sceneDelgate.window?.makeKeyAndVisible()
         }else{

@@ -58,6 +58,10 @@ class SearchResultView: BaseView {
         self.searchResultTableView.dataSource = dataSource
     }
     
+    func configureSearchBarDelegate(delegate: UISearchBarDelegate){
+        self.searchBar.delegate = delegate
+    }
+    
     func reloadDate(){
         self.searchResultTableView.reloadData()
     }

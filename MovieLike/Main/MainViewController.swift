@@ -17,7 +17,6 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         
         configure()
-        print("A")
     }
     
     private func configure(){

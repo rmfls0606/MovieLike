@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
 
     private let searchResultView = SearchResultView()
     
@@ -26,6 +26,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         
         self.view.addSubview(searchResultView)
         searchResultView.configureDelegate(delegate: self, dataSource: self)
+        searchResultView.configureSearchBarDelegate(delegate: self)
         
         searchResultView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide)
@@ -51,5 +52,27 @@ extension SearchResultViewController{
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 100
+    }
+}
+
+extension SearchResultViewController{
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.showsCancelButton = false
+        APIManager.shard.callRequest(api: .search(query: searchBar.text!)) { (response: SearchResponse) in
+            print(response)
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
+
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        view.endEditing(true)
+        searchBar.showsCancelButton = false
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.showsCancelButton = true
+        return true
     }
 }
