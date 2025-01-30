@@ -14,7 +14,7 @@ final class SetProfileTableViewCell: BaseTableViewCell {
     
     private lazy var setProfileListTitle: UILabel = {
         let label = UILabel()
-        label.textColor = .white
+        label.textColor = UIColor(named: "lightGrayColor")
         label.font = .systemFont(ofSize: 14)
         return label
     }()
@@ -30,7 +30,8 @@ final class SetProfileTableViewCell: BaseTableViewCell {
     }
     
     override func configureView() {
-        
+        self.backgroundColor = .black
+        self.selectionStyle = .none
     }
 
     func configureData(text: String){

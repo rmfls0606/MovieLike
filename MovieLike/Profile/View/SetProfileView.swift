@@ -13,6 +13,7 @@ final class SetProfileView: BaseView {
     private lazy var setListTableView: UITableView = {
         let view = UITableView()
         view.register(SetProfileTableViewCell.self , forCellReuseIdentifier: SetProfileTableViewCell.identifier)
+        view.isScrollEnabled = false
         view.backgroundColor = .black
         return view
     }()

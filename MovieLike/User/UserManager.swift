@@ -29,8 +29,18 @@ class UserManager{
         defaults.set(user.joinDate, forKey: userJoinDateKey)
     }
     
+    func removeUserInfo(){
+        defaults.removeObject(forKey: userImageKey)
+        defaults.removeObject(forKey: userNicknameKey)
+        defaults.removeObject(forKey: userJoinDateKey)
+    }
+    
     func saveOnBoarding(){
         defaults.set(true, forKey: "onBoarding")
+    }
+    
+    func removeOnBoarding(){
+        defaults.removeObject(forKey: "onBoarding")
     }
     
     func getUserInfo() -> User{
@@ -38,7 +48,7 @@ class UserManager{
         let nickName = defaults.string(forKey: userNicknameKey)
         let userJoinDate = defaults.string(forKey: userJoinDateKey)
         
-        return User(imageName: imageName!, nickname: nickName!, joinDate: userJoinDate!)
+        return User(imageName: "a", nickname: "a", joinDate: "a")
     }
     
     func getJoinDate() -> String{

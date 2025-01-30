@@ -37,6 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         tabBarController.tabBar.tintColor = UIColor(named: "blueColor")
         
         let isOnboarding = UserDefaults.standard.bool(forKey: "isOnboarding")
+        print(isOnboarding)
         if isOnboarding{
             window?.rootViewController = UINavigationController(rootViewController: tabBarController)
         }else{
