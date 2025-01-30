@@ -36,19 +36,19 @@ class UserManager{
     }
     
     func saveOnBoarding(){
-        defaults.set(true, forKey: "onBoarding")
+        defaults.set(true, forKey: "isOnboarding")
     }
     
     func removeOnBoarding(){
-        defaults.removeObject(forKey: "onBoarding")
+        defaults.set(false, forKey: "isOnboarding")
     }
     
     func getUserInfo() -> User{
-        let imageName = defaults.string(forKey: userImageKey)
-        let nickName = defaults.string(forKey: userNicknameKey)
-        let userJoinDate = defaults.string(forKey: userJoinDateKey)
+        let imageName = defaults.string(forKey: userImageKey) ?? "-"
+        let nickName = defaults.string(forKey: userNicknameKey) ?? "-"
+        let userJoinDate = defaults.string(forKey: userJoinDateKey) ?? "-"
         
-        return User(imageName: "a", nickname: "a", joinDate: "a")
+        return User(imageName: imageName, nickname: nickName, joinDate: userJoinDate)
     }
     
     func getJoinDate() -> String{

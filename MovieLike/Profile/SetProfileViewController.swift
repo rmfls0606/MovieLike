@@ -82,16 +82,11 @@ extension SetProfileViewController{
                 UserManager.shared.removeOnBoarding()
                 UserManager.shared.removeUserInfo()
                 
-                
-                print("AAA")
-                print(UserDefaults.standard
-                    .bool(forKey: "onBoarding"))
-                
                 guard let sceneDelgate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else{
                     return
                 }
                 
-                let newVC = OnBoardingViewController()
+                let newVC = UINavigationController(rootViewController: OnBoardingViewController())
                 sceneDelgate.window?.rootViewController = newVC
                 sceneDelgate.window?.makeKeyAndVisible()
             }
