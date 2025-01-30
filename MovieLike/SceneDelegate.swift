@@ -17,14 +17,21 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let firstVC = UINavigationController(rootViewController: MainViewController())
+        let secondVC = UINavigationController(rootViewController: ViewController())
+        let thirdVC = UINavigationController(rootViewController: SetProfileViewController())
         
         let tabBarController = UITabBarController()
-        tabBarController.setViewControllers([firstVC], animated: true)
+        tabBarController.view.backgroundColor = .black
+        tabBarController.setViewControllers([firstVC, secondVC, thirdVC], animated: true)
         
         if let items = tabBarController.tabBar.items {
             items[0].selectedImage = UIImage(systemName: "popcorn")
             items[0].image = UIImage(systemName: "popcorn")
             items[0].title = "CENEMA"
+            
+            items[2].selectedImage = UIImage(systemName: "person.circle")
+            items[2].image = UIImage(systemName: "person.circle")
+            items[2].title = "PROFILE"
         }
         
         tabBarController.tabBar.tintColor = UIColor(named: "blueColor")

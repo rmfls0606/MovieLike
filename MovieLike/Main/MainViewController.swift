@@ -25,7 +25,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.navigationItem.title = "MovieLike"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: nil)
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
         rightBarButton.tintColor = UIColor(named: "blueColor")
         
         self.navigationItem.rightBarButtonItem = rightBarButton
@@ -68,6 +68,12 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         let navigationVC = UINavigationController(rootViewController: presentVC)
         self.present(navigationVC, animated: true)
+    }
+    
+    @objc
+    private func searchButtonTapped(){
+        let nextVC = SearchResultViewController()
+        self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
 

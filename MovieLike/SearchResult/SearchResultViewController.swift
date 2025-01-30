@@ -31,7 +31,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
             make.top.equalTo(self.view.safeAreaLayoutGuide)
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalToSuperview()
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
 }

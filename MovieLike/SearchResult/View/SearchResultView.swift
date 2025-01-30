@@ -20,6 +20,7 @@ class SearchResultView: BaseView {
         searchBar.searchTextField.attributedPlaceholder = NSAttributedString(string: searchBar.searchTextField.placeholder!, attributes: [.foregroundColor: UIColor.white])
         searchBar.layer.cornerRadius =  10
         searchBar.layer.masksToBounds = true
+        searchBar.becomeFirstResponder()
         return searchBar
     }()
     
