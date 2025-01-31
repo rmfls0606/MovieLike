@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
+final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
     private var currentPage: Int = 0{
         didSet{
             backDropView.pageControl.currentPage = currentPage
@@ -16,6 +16,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
     }
     private let backDropView = BackDropView()
     private let synopsisView = SynopsisView()
+    private let castView = CastView()
     
     var navigationTitle: String?
     
@@ -32,6 +33,8 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
         self.view.backgroundColor = .black
         view.addSubview(backDropView)
         view.addSubview(synopsisView)
+        view.addSubview(castView)
+        castView.configureDelegate(delegate: self, dataSource: self)
         
         backDropView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
@@ -46,6 +49,13 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
             make.trailing.equalToSuperview().offset(-12)
             make.bottom.equalTo(self.synopsisView.content.snp.bottom)
         }
+        
+        castView.snp.makeConstraints { make in
+            make.top.equalTo(synopsisView.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(self.castView.collectionView.snp.bottom)
+        }
     }
 }
 
@@ -55,4 +65,18 @@ extension MovieDetailViewController{
         currentPage = page
     }
     
+}
+
+extension MovieDetailViewController{
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        40
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastActorCollectionViewCell.identifier, for: indexPath) as? CastActorCollectionViewCell else {
+            return UICollectionViewCell()
+        }
+        
+        return cell
+    }
 }
