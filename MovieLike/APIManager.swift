@@ -23,12 +23,11 @@ enum TheMovieDBRequest{
         case .trending:
             return URL(string: baseURL + "trending/movie/day?language=ko-KR&page=1")!
         case .search(let query):
-            return URL(string: baseURL + "search/movie?query=\(query)&include_adult=false&language=ko-KR&page=1")!
+            return URL(string: baseURL + "search/movie?query=\(query)&include_adult=false&language=ko-KR")!
         case .image(let id):
             return URL(string: baseURL + "movie/\(id)/images")!
         case .credit(let id):
             return URL(string: baseURL + "movie/\(id)credits?language=ko-KR")!
-            
         }
     }
     
@@ -48,8 +47,8 @@ class APIManager{
     
     private init() {}
     
-    func callRequest<T: Decodable>(api: TheMovieDBRequest, parameter: [String: Any]? = nil, succesHandler: @escaping (T) -> Void, failHandler: @escaping (Error) -> Void){
-        AF.request(api.endpoint, method: api.method, headers: api.header)
+    func callRequest<T: Decodable>(api: TheMovieDBRequest, parameters: [String: Any]? = nil, succesHandler: @escaping (T) -> Void, failHandler: @escaping (Error) -> Void){
+        AF.request(api.endpoint, method: api.method, parameters: parameters, headers: api.header)
             .validate(statusCode: 200..<500)
             .responseDecodable(of: T.self){ response in
                 print(response)

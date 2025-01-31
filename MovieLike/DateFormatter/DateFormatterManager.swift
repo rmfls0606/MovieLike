@@ -18,4 +18,16 @@ class DateFormatterManager{
         dateFormatter.dateFormat = "yy.MM.dd"
         return dateFormatter.string(from: date)
     }
+    
+    func formatString(_ dateString: String) -> String{
+        if dateString.isEmpty{
+            return "-"
+        }else{
+            dateFormatter.dateFormat = "yyyy-MM-dd"
+            let date = dateFormatter.date(from: dateString)!
+            
+            dateFormatter.dateFormat = "yyyy. MM. dd"
+            return dateFormatter.string(from: date)
+        }
+    }
 }

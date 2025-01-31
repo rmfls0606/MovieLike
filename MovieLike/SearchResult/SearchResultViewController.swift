@@ -8,9 +8,13 @@
 import UIKit
 import SnapKit
 
-final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate {
-
+final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDataSourcePrefetching {
+    
     private let searchResultView = SearchResultView()
+    private var searchList = [SearchMovieResult]()
+    private var page = 1
+    private var isEnd = false
+    private var query = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,7 +29,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         self.view.addSubview(searchResultView)
-        searchResultView.configureDelegate(delegate: self, dataSource: self)
+        searchResultView.configureDelegate(delegate: self, dataSource: self, preFetching: self)
         searchResultView.configureSearchBarDelegate(delegate: self)
         
         searchResultView.snp.makeConstraints { make in
@@ -35,11 +39,27 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
+    
+    private func callBackRequest(query: String, page: Int){
+        let parameters = ["page": page]
+        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
+            if page == 1{
+                self.searchList = response.results
+            }else{
+                self.searchList.append(contentsOf: response.results)
+            }
+            
+            self.isEnd = page >= response.total_pages
+            self.searchResultView.reloadDate()
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
+    }
 }
 
 extension SearchResultViewController{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        10
+        searchList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -47,23 +67,24 @@ extension SearchResultViewController{
             return UITableViewCell()
         }
         
+        let data = searchList[indexPath.row]
+        cell.configureInsertData(data: data)
         return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 120
     }
 }
 
 extension SearchResultViewController{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
-        APIManager.shard.callRequest(api: .search(query: searchBar.text!)) { (response: SearchResponse) in
-            print(response)
-        } failHandler: { error in
-            print(error.localizedDescription)
-        }
-
+        
+        self.page = 1
+        self.query = searchBar.text!
+        callBackRequest(query: query, page: 1)
+        view.endEditing(true)
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
@@ -74,5 +95,23 @@ extension SearchResultViewController{
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
         searchBar.showsCancelButton = true
         return true
+    }
+}
+
+extension SearchResultViewController{
+    func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
+        guard !isEnd else { return }
+        
+        for item in indexPaths{
+            if searchList.count - 2 <= item.item{
+                self.page += 1
+                callBackRequest(query: query, page: self.page)
+                break
+            }
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, cancelPrefetchingForRowsAt indexPaths: [IndexPath]) {
+        
     }
 }

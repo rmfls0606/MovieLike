@@ -53,9 +53,10 @@ class SearchResultView: BaseView {
         
     }
 
-    func configureDelegate(delegate: UITableViewDelegate, dataSource: UITableViewDataSource){
+    func configureDelegate(delegate: UITableViewDelegate, dataSource: UITableViewDataSource, preFetching: UITableViewDataSourcePrefetching){
         self.searchResultTableView.delegate = delegate
         self.searchResultTableView.dataSource = dataSource
+        self.searchResultTableView.prefetchDataSource = preFetching
     }
     
     func configureSearchBarDelegate(delegate: UISearchBarDelegate){
