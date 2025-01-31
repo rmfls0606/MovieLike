@@ -43,7 +43,9 @@ final class TodayMovieView: BaseView {
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
         collectionView.register(TodayMovieCollectionViewCell.self, forCellWithReuseIdentifier: TodayMovieCollectionViewCell.identifier)
         collectionView.tag = 1
+        collectionView.showsHorizontalScrollIndicator = false
         collectionView.collectionViewLayout = createCollectionViewLayout()
+        collectionView.backgroundColor = .green
         return collectionView
     }
     
@@ -51,7 +53,7 @@ final class TodayMovieView: BaseView {
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
         let width = (UIScreen.main.bounds.width * 0.6)
-        layout.itemSize = CGSize(width: width, height: 300)
+        layout.itemSize = CGSize(width: width, height: 250)
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -70,7 +72,8 @@ final class TodayMovieView: BaseView {
         
         todayMovieCollectionView.snp.makeConstraints { make in
             make.top.equalTo(todayMovieTitleLabel.snp.bottom).offset(6)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
+            make.bottom.equalToSuperview()
         }
     }
     

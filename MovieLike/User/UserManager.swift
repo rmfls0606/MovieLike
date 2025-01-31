@@ -22,6 +22,7 @@ class UserManager{
     private let userImageKey = "userImage"
     private let userNicknameKey = "userNickname"
     private let userJoinDateKey = "userJoinDate"
+    private let userRecentSearchNameKey = "userRecentSearchName"
     
     func saveUserInfo(user: User){
         defaults.set(user.imageName, forKey: userImageKey)
@@ -53,5 +54,22 @@ class UserManager{
     
     func getJoinDate() -> String{
         return defaults.string(forKey: userJoinDateKey)!
+    }
+    
+    func saveRecentSearchName(text: String){
+        if var searchData = defaults.stringArray(forKey: userRecentSearchNameKey){
+            if searchData.contains(text){
+                searchData.remove(at: searchData.firstIndex(of: text)!)
+            }
+            searchData.insert(text, at: 0)
+            defaults.set(searchData, forKey: userRecentSearchNameKey)
+        }else{
+            defaults.set([text], forKey: userRecentSearchNameKey)
+        }
+    }
+    
+    func getREcentSearchName() -> [String]?{
+        guard let searchData = defaults.stringArray(forKey: userRecentSearchNameKey) else { return nil }
+        return searchData
     }
 }

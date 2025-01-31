@@ -99,6 +99,8 @@ extension SearchResultViewController{
         self.query = searchBar.text!
         self.searchStatus = true
         callBackRequest(query: query, page: 1)
+        UserManager.shared.saveRecentSearchName(text: self.query)
+        print(UserManager.shared.getREcentSearchName())
         view.endEditing(true)
     }
     

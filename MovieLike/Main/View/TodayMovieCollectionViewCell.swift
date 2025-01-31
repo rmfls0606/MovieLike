@@ -62,7 +62,7 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         movieImageView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(contentView.snp.width).multipliedBy(1.5)
+            make.height.equalTo(250)
         }
         
         titleAndLikeButtonView.snp.makeConstraints { make in
@@ -74,9 +74,8 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
         movieTitle.snp.makeConstraints { make in
             make.top.leading.equalToSuperview()
             make.trailing.equalTo(movieLikeBtn.snp.leading).offset(-6)
+            make.bottom.equalToSuperview()
         }
-        
-        movieTitle.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         movieLikeBtn.snp.makeConstraints { make in
             make.top.trailing.equalToSuperview()
@@ -85,12 +84,12 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
         
         movieContent.snp.makeConstraints { make in
             make.top.equalTo(titleAndLikeButtonView.snp.bottom).offset(6)
-            make.leading.trailing.bottom.equalToSuperview()
+            make.leading.trailing.equalToSuperview()
         }
     }
     
     override func configureView() {
-        self.backgroundColor = .orange
+        
     }
     
 }
