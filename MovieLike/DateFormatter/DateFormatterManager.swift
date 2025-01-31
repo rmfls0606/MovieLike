@@ -19,15 +19,15 @@ class DateFormatterManager{
         return dateFormatter.string(from: date)
     }
     
-    func formatString(_ dateString: String) -> String{
-        if dateString.isEmpty{
+    func formatString(_ dateString: String?) -> String{
+        guard let dateString = dateString, !dateString.isEmpty else {
             return "-"
-        }else{
-            dateFormatter.dateFormat = "yyyy-MM-dd"
-            let date = dateFormatter.date(from: dateString)!
-            
-            dateFormatter.dateFormat = "yyyy. MM. dd"
-            return dateFormatter.string(from: date)
         }
+        
+        dateFormatter.dateFormat = "yyyy-mm-dd"
+        let date = dateFormatter.date(from: dateString)!
+        
+        dateFormatter.dateFormat = "yyyy. mm. dd"
+        return dateFormatter.string(from: date)
     }
 }

@@ -12,7 +12,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     private let searchResultView = SearchResultView()
     private var searchList = [SearchMovieResult]()
-    private var emptyView = EmptyView()
+    private lazy var emptyView = EmptyView()
     private var page = 1
     private var isEnd = false
     private var query = ""
@@ -100,7 +100,6 @@ extension SearchResultViewController{
         self.searchStatus = true
         callBackRequest(query: query, page: 1)
         UserManager.shared.saveRecentSearchName(text: self.query)
-        print(UserManager.shared.getREcentSearchName())
         view.endEditing(true)
     }
     

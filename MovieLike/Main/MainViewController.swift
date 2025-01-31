@@ -12,6 +12,12 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private let userProfieView = UserProfileView()
     private let recentSearchView = RecentSearchView()
     private let todayMovieView = TodayMovieView()
+    private lazy var emptyView = EmptyView()
+    private var recentSearchData = [String]()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.recentSearchData = UserManager.shared.getREcentSearchName()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,7 +84,14 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
 
 extension MainViewController{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        1
+        if !self.recentSearchData.isEmpty{
+            self.recentSearchView.recentSearchCollectionView.backgroundView = nil
+            return recentSearchData.count
+        }else{
+            self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
+            emptyView.configureData(text: "최근 검색어 내역이 없습니다.")
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -87,7 +100,7 @@ extension MainViewController{
                 return UICollectionViewCell()
             }
             
-            cell.configureText(text: "킁킁")
+            cell.configureText(text: self.recentSearchData[indexPath.item])
             return cell
         }else if collectionView.tag == 1{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayMovieCollectionViewCell.identifier, for: indexPath) as? TodayMovieCollectionViewCell else{
