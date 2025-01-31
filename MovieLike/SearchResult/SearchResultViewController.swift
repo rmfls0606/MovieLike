@@ -10,6 +10,7 @@ import SnapKit
 
 final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDataSourcePrefetching {
     
+    var preVCReload: (() -> Void)?
     private let searchResultView = SearchResultView()
     private var searchList = [SearchMovieResult]()
     private lazy var emptyView = EmptyView()
@@ -21,10 +22,10 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         configure()
     }
-
+    
     private func configure(){
         self.view.backgroundColor = .black
         
@@ -44,6 +45,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     }
     
     private func callBackRequest(query: String, page: Int){
+        UserManager.shared.saveRecentSearchName(text: query)
         let parameters = ["page": page]
         APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
             if page == 1{
@@ -54,6 +56,8 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
             
             self.isEnd = page >= response.total_pages
             self.searchResultView.reloadDate()
+            
+            self.preVCReload?()
         } failHandler: { error in
             print(error.localizedDescription)
         }
@@ -89,6 +93,12 @@ extension SearchResultViewController{
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 120
     }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let nextVC = MovieDetailViewController()
+        nextVC.navigationTitle = searchList[indexPath.row].title
+        self.navigationController?.pushViewController(nextVC, animated: true)
+    }
 }
 
 extension SearchResultViewController{
@@ -99,7 +109,6 @@ extension SearchResultViewController{
         self.query = searchBar.text!
         self.searchStatus = true
         callBackRequest(query: query, page: 1)
-        UserManager.shared.saveRecentSearchName(text: self.query)
         view.endEditing(true)
     }
     

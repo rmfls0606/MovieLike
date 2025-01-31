@@ -68,8 +68,12 @@ class UserManager{
         }
     }
     
-    func getREcentSearchName() -> [String]{
+    func getRecentSearchName() -> [String]{
         guard let searchData = defaults.stringArray(forKey: userRecentSearchNameKey) else { return [] }
         return searchData
+    }
+    
+    func removeAllRecentSearchName(){
+        defaults.removeObject(forKey: userRecentSearchNameKey)
     }
 }

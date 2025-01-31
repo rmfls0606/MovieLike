@@ -10,6 +10,7 @@ import SnapKit
 
 final class RecentSearchView: BaseView {
 
+    var onButtonTapped: (() -> Void)?
     //타이틀
     private lazy var recentTitleLabel: UILabel = {
         let label = UILabel()
@@ -27,6 +28,7 @@ final class RecentSearchView: BaseView {
         btn.titleLabel?.font = .systemFont(ofSize: 14)
         btn.setTitleColor(UIColor(named: "blueColor"), for: .normal)
         btn.setTitleColor(UIColor(named: "blueColor"), for: .highlighted)
+        btn.addTarget(self, action: #selector(removeAllButtonTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -56,11 +58,13 @@ final class RecentSearchView: BaseView {
         recentTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
             make.top.equalToSuperview()
+            make.bottom.equalTo(recentSearchCollectionView.snp.top).offset(-12)
         }
         
         allRemoveButton.snp.makeConstraints { make in
             make.top.equalToSuperview()
             make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(recentSearchCollectionView.snp.top).offset(-12)
         }
         
         recentSearchCollectionView.snp.makeConstraints { make in
@@ -77,5 +81,15 @@ final class RecentSearchView: BaseView {
     func configureDelegate(delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource){
         self.recentSearchCollectionView.delegate = delegate
         self.recentSearchCollectionView.dataSource = dataSource
+    }
+    
+    func reloadData(){
+        self.recentSearchCollectionView.reloadData()
+    }
+    
+    @objc
+    private func removeAllButtonTapped(){
+        print("이상하")
+        onButtonTapped?()
     }
 }

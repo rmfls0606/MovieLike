@@ -13,10 +13,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private let recentSearchView = RecentSearchView()
     private let todayMovieView = TodayMovieView()
     private lazy var emptyView = EmptyView()
-    private var recentSearchData = [String]()
-    
-    override func viewWillAppear(_ animated: Bool) {
-        self.recentSearchData = UserManager.shared.getREcentSearchName()
+    private var recentSearchData: [String]{ UserManager.shared.getRecentSearchName()
     }
     
     override func viewDidLoad() {
@@ -39,6 +36,9 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         userProfieView.onTapGesureClosure = presentViewController
         self.view.addSubview(recentSearchView)
         self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
+        self.recentSearchView.onButtonTapped = { [weak self] in
+            self?.recentSearchRemoveAll()
+        }
         
         self.view.addSubview(todayMovieView)
         self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
@@ -78,12 +78,16 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     @objc
     private func searchButtonTapped(){
         let nextVC = SearchResultViewController()
+        nextVC.preVCReload = { [weak self] in
+            self?.recentSearchView.reloadData()
+        }
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
 
 extension MainViewController{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        print(recentSearchData.count)
         if !self.recentSearchData.isEmpty{
             self.recentSearchView.recentSearchCollectionView.backgroundView = nil
             return recentSearchData.count
@@ -110,5 +114,10 @@ extension MainViewController{
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    private func recentSearchRemoveAll(){
+        UserManager.shared.removeAllRecentSearchName()
+        self.recentSearchView.reloadData()
     }
 }
