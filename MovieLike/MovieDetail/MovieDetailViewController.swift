@@ -15,6 +15,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
         }
     }
     private let backDropView = BackDropView()
+    private let synopsisView = SynopsisView()
     
     var navigationTitle: String?
     
@@ -30,14 +31,21 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate {
     private func configure(){
         self.view.backgroundColor = .black
         view.addSubview(backDropView)
+        view.addSubview(synopsisView)
         
         backDropView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
             make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.bottom.equalTo(self.backDropView.backDropStackView).offset(12)
+            make.bottom.equalTo(self.backDropView.backDropStackView)
         }
-        
         backDropView.configureDelegate(delegate: self)
+        
+        synopsisView.snp.makeConstraints { make in
+            make.top.equalTo(backDropView.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(self.synopsisView.content.snp.bottom)
+        }
     }
 }
 
