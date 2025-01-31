@@ -49,10 +49,9 @@ final class TodayMovieView: BaseView {
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
-        layout.minimumLineSpacing = 5.0
-        layout.minimumInteritemSpacing = 5.0
+        layout.minimumInteritemSpacing = 10
         let width = (UIScreen.main.bounds.width * 0.6)
-        layout.itemSize = CGSize(width: width, height: width * 1.8)
+        layout.itemSize = CGSize(width: width, height: 300)
         layout.scrollDirection = .horizontal
         return layout
     }

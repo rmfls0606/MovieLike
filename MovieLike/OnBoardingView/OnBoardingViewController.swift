@@ -32,7 +32,6 @@ final class OnBoardingViewController: UIViewController {
     }
     
     private func startButtonTapped(){
-        print("CC")
         let nextVc = ProfileSetNickNameViewController()
         self.navigationController?.pushViewController(nextVc, animated: true)
     }

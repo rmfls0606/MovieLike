@@ -21,7 +21,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func configure(){
         self.view.backgroundColor = .black
-        self.navigationItem.title = "MovieLike"
+        self.navigationItem.title = "오늘의 영화"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))

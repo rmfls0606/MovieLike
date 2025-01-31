@@ -80,6 +80,7 @@ class SearchResultTableViewCell: BaseTableViewCell {
         searchResultTitle.snp.makeConstraints { make in
             make.top.equalToSuperview().offset(12)
             make.leading.equalTo(searchResultimageView.snp.trailing).offset(12)
+            make.trailing.equalToSuperview()
         }
         
         searchResultDate.snp.makeConstraints { make in
