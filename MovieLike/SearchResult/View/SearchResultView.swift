@@ -24,7 +24,7 @@ class SearchResultView: BaseView {
         return searchBar
     }()
     
-    private lazy var searchResultTableView: UITableView = {
+    private(set) lazy var searchResultTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(SearchResultTableViewCell.self , forCellReuseIdentifier: SearchResultTableViewCell.identifier)
         tableView.backgroundColor = .black

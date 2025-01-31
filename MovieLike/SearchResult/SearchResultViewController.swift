@@ -12,9 +12,12 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     private let searchResultView = SearchResultView()
     private var searchList = [SearchMovieResult]()
+    private var emptyView = EmptyView()
     private var page = 1
     private var isEnd = false
     private var query = ""
+    
+    var searchStatus: Bool = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -59,7 +62,18 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
 
 extension SearchResultViewController{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        searchList.count
+        if searchList.count == 0 {
+            if searchStatus{
+                self.searchResultView.searchResultTableView.backgroundView = emptyView
+                emptyView.configureData(text: "원하는 검색결과를 찾지 못했습니다.")
+            }else{
+                self.searchResultView.searchResultTableView.backgroundView = emptyView
+            }
+        }else{
+            self.searchResultView.searchResultTableView.backgroundView = nil
+        }
+        
+        return searchList.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -83,6 +97,7 @@ extension SearchResultViewController{
         
         self.page = 1
         self.query = searchBar.text!
+        self.searchStatus = true
         callBackRequest(query: query, page: 1)
         view.endEditing(true)
     }
