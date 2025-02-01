@@ -97,7 +97,7 @@ extension SearchResultViewController{
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextVC = MovieDetailViewController()
         nextVC.navigationTitle = searchList[indexPath.row].title
-        nextVC.movieID = searchList[indexPath.row].id
+        nextVC.result = searchList[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }

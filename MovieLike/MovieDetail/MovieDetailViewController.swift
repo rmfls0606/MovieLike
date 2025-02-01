@@ -15,7 +15,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         }
     }
     
-    var movieID: Int?
+    var result: SearchMovieResult?
     private var backdropImages: [String] = []
     
     private lazy var scrollView: UIScrollView = {
@@ -59,7 +59,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         self.view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         stackView.addSubview(backDropView)
-
+        
         stackView.addSubview(synopsisView)
         stackView.addSubview(castView)
         castView.configureDelegate(delegate: self, dataSource: self)
@@ -67,8 +67,9 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         stackView.addSubview(posterView)
         posterView.configureDelegate(delegate: self, dataSource: self)
         
-        if let movieID{
-            callRequest(id: movieID)
+        if let result{
+            callRequest(id: result.id)
+            backDropView.configureBackDropInfo(data: result)
         }
         
         scrollView.snp.makeConstraints { make in

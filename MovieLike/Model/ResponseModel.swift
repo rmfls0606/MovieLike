@@ -20,6 +20,7 @@ struct SearchMovieResult: Decodable {
     let backdrop_path: String?
     let release_date: String
     let overview: String
+    let vote_average: Double?
     let genre_ids: [Int]
 }
 

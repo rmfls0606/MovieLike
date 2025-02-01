@@ -111,7 +111,7 @@ final class BackDropView: BaseView {
     }
     
     override func configureView() {}
-
+    
     @objc private func pageControlPageTapped(_ sender: UIPageControl) {
         let page = sender.currentPage
         let offsetX = CGFloat(page) * scrollView.frame.width
@@ -168,6 +168,36 @@ final class BackDropView: BaseView {
             make.height.equalTo(20)
         }
         return view
+    }
+    
+    private func createImageTextLabel(imageName: String, text: String) -> NSAttributedString {
+        let attributedString = NSMutableAttributedString()
+        
+        let attachment = NSTextAttachment()
+        attachment.image = UIImage(systemName: imageName)?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
+        attachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
+        attributedString.append(NSAttributedString(attachment: attachment))
+        
+        let textString = NSAttributedString(
+            string: " \(text)",
+            attributes: [
+                .font: UIFont.systemFont(ofSize: 12),
+                .foregroundColor: UIColor(named: "lightGrayColor")!,
+            ]
+        )
+        attributedString.append(textString)
+        
+        return attributedString
+    }
+    
+    func configureBackDropInfo(data: SearchMovieResult){
+        openDay.attributedText = createImageTextLabel(imageName: "calendar", text: DateFormatterManager.shared.formatString(data.release_date))
+        if let vote_average = data.vote_average{
+            likePoint.attributedText = createImageTextLabel(imageName: "star.fill", text: String(vote_average))
+        }else{
+            likePoint.attributedText = createImageTextLabel(imageName: "star.fill", text: "-")
+        }
+        genre.attributedText = createImageTextLabel(imageName: "film.fill", text: GenreMappingModel.returnGenreNames(genre_Ids: data.genre_ids).joined(separator: ","))
     }
 }
 
