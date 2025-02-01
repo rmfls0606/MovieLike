@@ -81,6 +81,7 @@ extension SetProfileViewController{
             self.showAlert(title: "탈퇴하기", message: "탈퇴를 하면 데이터가 모두 초기화됩니다.\n탈퇴 하시겠습니까?") {
                 UserManager.shared.removeOnBoarding()
                 UserManager.shared.removeUserInfo()
+                UserManager.shared.removeAllRecentSearchName()
                 
                 guard let sceneDelgate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate else{
                     return
