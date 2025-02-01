@@ -61,6 +61,9 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         stackView.addSubview(backDropView)
         
         stackView.addSubview(synopsisView)
+        
+        synopsisView.onButtonTapped = textWideButtonTapped
+        
         stackView.addSubview(castView)
         castView.configureDelegate(delegate: self, dataSource: self)
         
@@ -70,6 +73,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         if let result{
             callRequest(id: result.id)
             backDropView.configureBackDropInfo(data: result)
+            synopsisView.configureContent(text: result.overview)
         }
         
         scrollView.snp.makeConstraints { make in
@@ -119,6 +123,23 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         } failHandler: { error in
             print(error.localizedDescription)
         }
+    }
+    
+    private func textWideButtonTapped(_ sender: UIButton){
+        if synopsisView.contentStatus{
+            sender.setTitle("More", for: .normal)
+            sender.setTitle("More", for: .highlighted)
+            synopsisView.content.numberOfLines = 3
+        }else{
+            synopsisView.content.numberOfLines = 0
+            sender.setTitle("Hide", for: .normal)
+            sender.setTitle("Hide", for: .highlighted)
+        }
+        
+        synopsisView.contentStatus.toggle()
+        
+        self.view.setNeedsLayout()
+        self.view.layoutIfNeeded()
     }
     
 }
