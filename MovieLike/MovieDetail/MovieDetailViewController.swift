@@ -14,9 +14,27 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
             backDropView.pageControl.currentPage = currentPage
         }
     }
+    
+    private lazy var scrollView: UIScrollView = {
+        let view = UIScrollView()
+        view.backgroundColor = .black
+        view.alwaysBounceVertical = true // 세로 바운스 활성화
+        view.isDirectionalLockEnabled = true
+        return view
+    }()
+    
+    private lazy var stackView: UIStackView = {
+        let view = UIStackView()
+        view.axis = .vertical
+        view.spacing = 24
+        view.distribution = .fill
+        return view
+    }()
+    
     private let backDropView = BackDropView()
     private let synopsisView = SynopsisView()
     private let castView = CastView()
+    private let posterView = PosterView()
     
     var navigationTitle: String?
     
@@ -31,14 +49,30 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     
     private func configure(){
         self.view.backgroundColor = .black
-        view.addSubview(backDropView)
-        view.addSubview(synopsisView)
-        view.addSubview(castView)
+        self.view.addSubview(scrollView)
+        scrollView.addSubview(stackView)
+        stackView.addSubview(backDropView)
+        stackView.addSubview(synopsisView)
+        stackView.addSubview(castView)
         castView.configureDelegate(delegate: self, dataSource: self)
         
+        stackView.addSubview(posterView)
+        posterView.configureDelegate(delegate: self, dataSource: self)
+        
+        scrollView.snp.makeConstraints { make in
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.top.equalToSuperview()
+            make.bottom.equalToSuperview()
+        }
+        
+        stackView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.size.equalTo(scrollView)
+        }
+        
         backDropView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.backDropView.backDropStackView)
         }
         backDropView.configureDelegate(delegate: self)
@@ -55,6 +89,13 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
             make.leading.equalToSuperview().offset(12)
             make.trailing.equalToSuperview().offset(-12)
             make.bottom.equalTo(self.castView.collectionView.snp.bottom)
+        }
+        
+        posterView.snp.makeConstraints { make in
+            make.top.equalTo(castView.snp.bottom).offset(24)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalToSuperview()
         }
     }
 }
@@ -73,10 +114,16 @@ extension MovieDetailViewController{
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastActorCollectionViewCell.identifier, for: indexPath) as? CastActorCollectionViewCell else {
-            return UICollectionViewCell()
+        if collectionView.tag == 0{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastActorCollectionViewCell.identifier, for: indexPath) as? CastActorCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            return cell
+        }else{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as? PosterCollectionViewCell else {
+                return UICollectionViewCell()
+            }
+            return cell
         }
-        
-        return cell
     }
 }

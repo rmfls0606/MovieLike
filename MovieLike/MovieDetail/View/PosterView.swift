@@ -1,5 +1,5 @@
 //
-//  CastView.swift
+//  PosterView.swift
 //  MovieLike
 //
 //  Created by 이상민 on 2/1/25.
@@ -8,13 +8,13 @@
 import UIKit
 import SnapKit
 
-final class CastView: BaseView {
+final class PosterView: BaseView {
 
     private lazy var title: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
         label.textColor = .white
-        label.text = "Cast"
+        label.text = "Poster"
         return label
     }()
     
@@ -22,24 +22,22 @@ final class CastView: BaseView {
     
     private func createCollectionView() -> UICollectionView{
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: UICollectionViewFlowLayout())
-        collectionView.register(CastActorCollectionViewCell.self, forCellWithReuseIdentifier: CastActorCollectionViewCell.identifier)
+        collectionView.register(PosterCollectionViewCell.self, forCellWithReuseIdentifier: PosterCollectionViewCell.identifier)
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.collectionViewLayout = createCollectionViewLayout()
         collectionView.backgroundColor = .black
-        collectionView.tag = 0
+        collectionView.tag = 1
         return collectionView
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
-        let padding = 20.0
+        let padding = 10.0
         let spacing = 12.0
-        layout.minimumLineSpacing = 20
-        layout.minimumInteritemSpacing = 6
+        layout.minimumLineSpacing = 10
         
-        let width = (UIScreen.main.bounds.width - (spacing * 2) - (padding * 2)) / 3
-        layout.itemSize = CGSize(width: width, height: 126)
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        let width = (UIScreen.main.bounds.width - (spacing * 2) - (padding * 3)) / 4
+        layout.itemSize = CGSize(width: width, height: 200)
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -57,7 +55,7 @@ final class CastView: BaseView {
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(title.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(126)
+            make.height.equalTo(200)
         }
     }
     
@@ -65,4 +63,5 @@ final class CastView: BaseView {
         self.collectionView.delegate = delegate
         self.collectionView.dataSource = dataSource
     }
+
 }
