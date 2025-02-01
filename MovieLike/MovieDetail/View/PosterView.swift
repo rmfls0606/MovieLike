@@ -64,4 +64,7 @@ final class PosterView: BaseView {
         self.collectionView.dataSource = dataSource
     }
 
+    func reloadData(){
+        self.collectionView.reloadData()
+    }
 }

@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class PosterCollectionViewCell: BaseCollectionViewCell {
     static let identifier = "PosterCollectionViewCell"
@@ -29,4 +30,10 @@ final class PosterCollectionViewCell: BaseCollectionViewCell {
             make.edges.equalToSuperview()
         }
     }
+    
+    func configureInsertImage(imageName: String){
+        self.imageView.image = nil
+        self.imageView.kf.setImage(with: URL(string: imageName))
+    }
+
 }

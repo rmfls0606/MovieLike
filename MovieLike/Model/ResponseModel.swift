@@ -32,19 +32,24 @@ struct SearchResultImage: Decodable {
 //MARK: - Image API
 struct BackDropResponse: Decodable {
     let backdrops: [BackDropsImage]
+    let posters: [PosterImage]
 }
 
 struct BackDropsImage: Decodable{
     let file_path: String?
 }
 
+struct PosterImage: Decodable{
+    let file_path: String?
+}
+
 //MARK: - Cast API
 
-struct CastResponse: Decodable {
+struct CastResponse: Decodable{
     let cast: [Cast]
 }
 
-struct Cast: Decodable {
+struct Cast: Decodable{
     let id: Int
     let name: String
     let original_name: String

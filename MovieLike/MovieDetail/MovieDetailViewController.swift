@@ -18,6 +18,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     var result: SearchMovieResult?
     private var backdropImages: [String] = []
     private var creditList: [Cast] = []
+    private var posterImages: [String] = []
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -121,6 +122,8 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
             if response.backdrops.isEmpty{ return }
             self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
+            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
+            self.posterView.reloadData()
             self.backDropView.insertImage(images: self.backdropImages)
         } failHandler: { error in
             print(error.localizedDescription)
@@ -160,7 +163,7 @@ extension MovieDetailViewController{
         if collectionView.tag == 0{
             return self.creditList.count
         }else{
-            return 1
+            return self.posterImages.count
         }
     }
     
@@ -176,6 +179,8 @@ extension MovieDetailViewController{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as? PosterCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            let data = self.posterImages[indexPath.item]
+            cell.configureInsertImage(imageName: data)
             return cell
         }
     }
