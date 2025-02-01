@@ -37,7 +37,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     private let castView = CastView()
     private let posterView = PosterView()
     
-//    var navigationTitle: String?
+    //    var navigationTitle: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,10 +45,50 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         self.navigationItem.title = self.result?.title
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: nil)
+        let isLiked = UserManager.shared.movieLikeContain(movieID: result?.id ?? 0)
+        let rightBarButton = UIBarButtonItem(
+            image: UIImage(systemName: isLiked ? "heart.fill" : "heart"),
+            style: .plain,
+            target: self,
+            action: #selector(rightBarButtonTapped)
+        )
         self.navigationItem.rightBarButtonItem = rightBarButton
         
         configure()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    @objc
+    private func updateLikeMovieList(_ notification: Notification) {
+        guard let userInfo = notification.userInfo,
+              let movieID = userInfo["movieID"] as? Int else { return }
+        
+        // 현재 보고 있는 영화가 변경된 영화라면 UI 업데이트
+        if self.result?.id == movieID {
+            let isLiked = UserManager.shared.movieLikeContain(movieID: movieID)
+            
+            self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: isLiked ? "heart.fill" : "heart")
+        }
+    }
+    
+    @objc
+    private func rightBarButtonTapped(){
+        guard let movieID = result?.id else { return }
+        
+        if UserManager.shared.movieLikeContain(movieID: movieID) {
+            UserManager.shared.removeLikedMovie(movieID: movieID)
+        } else {
+            UserManager.shared.saveLikeMovie(movieID: movieID)
+        }
+        
+        let isLiked = UserManager.shared.movieLikeContain(movieID: movieID)
+        self.navigationItem.rightBarButtonItem?.image = UIImage(systemName: isLiked ? "heart.fill" : "heart")
+        
+        NotificationCenter.default.post(name: Notification.Name("likeButtonClicked"), object: nil, userInfo: ["movieID": movieID])
     }
     
     private func configure(){

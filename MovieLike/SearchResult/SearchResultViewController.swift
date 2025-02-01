@@ -24,6 +24,27 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         super.viewDidLoad()
         
         configure()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
+    }
+    
+    @objc
+    private func updateLikeMovieList(_ notification: Notification){
+        guard let userInfo = notification.userInfo,
+              let movieID = userInfo["movieID"] as? Int else { return }
+        
+        if let index = searchList.firstIndex(where: {$0.id == movieID}){
+            let indexPath = IndexPath(row: index, section: 0)
+            if let cell = searchResultView.searchResultTableView.cellForRow(at: indexPath) as? SearchResultTableViewCell {
+                let isLiked = UserManager.shared.movieLikeContain(movieID: movieID)
+                cell.searchResultLikeBtn.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
+                cell.searchResultLikeBtn.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .highlighted)
+                cell.searchResultLikeBtn.isSelected = isLiked
+            }
+        }
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func configure(){
@@ -94,7 +115,7 @@ extension SearchResultViewController{
         }
         
         let data = searchList[indexPath.row]
-        cell.configureInsertData(data: data)
+        cell.configureInsertData(data: data, likeButtonState: UserManager.shared.movieLikeContain(movieID: data.id))
         return cell
     }
     
@@ -104,7 +125,6 @@ extension SearchResultViewController{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextVC = MovieDetailViewController()
-//        nextVC.navigationTitle = searchList[indexPath.row].title
         nextVC.result = searchList[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
     }

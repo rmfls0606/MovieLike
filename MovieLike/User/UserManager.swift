@@ -23,6 +23,7 @@ class UserManager{
     private let userNicknameKey = "userNickname"
     private let userJoinDateKey = "userJoinDate"
     private let userRecentSearchNameKey = "userRecentSearchName"
+    private let userlikedMovieKey = "userLikedMovie"
     
     func saveUserInfo(user: User){
         defaults.set(user.imageName, forKey: userImageKey)
@@ -75,5 +76,30 @@ class UserManager{
     
     func removeAllRecentSearchName(){
         defaults.removeObject(forKey: userRecentSearchNameKey)
+    }
+    
+    func saveLikeMovie(movieID: Int){
+        var likeMovieList = getLikedMovie()
+        if !likeMovieList.contains(movieID){
+            likeMovieList.append(movieID)
+            defaults.set(likeMovieList, forKey: userlikedMovieKey)
+        }
+        
+    }
+    
+    func removeLikedMovie(movieID: Int){
+        var likeMovieList = getLikedMovie()
+        if let index = likeMovieList.firstIndex(of: movieID){
+            likeMovieList.remove(at: index)
+            defaults.set(likeMovieList, forKey: userlikedMovieKey)
+        }
+    }
+    
+    func getLikedMovie() -> [Int]{
+        return defaults.array(forKey: userlikedMovieKey) as? [Int] ?? []
+    }
+    
+    func movieLikeContain(movieID: Int) -> Bool{
+        return getLikedMovie().contains(movieID)
     }
 }

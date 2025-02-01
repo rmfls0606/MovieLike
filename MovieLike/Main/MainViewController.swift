@@ -29,6 +29,27 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         super.viewDidLoad()
         print(2)
         configure()
+        NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
+    }
+    
+    @objc
+    private func updateLikeMovieList(_ notification: Notification){
+        guard let userInfo = notification.userInfo,
+              let movieID = userInfo["movieID"] as? Int else { return }
+        
+        if let index = trendingMovieData.firstIndex(where: { $0.id == movieID }) {
+            let indexPath = IndexPath(item: index, section: 0)
+            if let cell = todayMovieView.todayMovieCollectionView.cellForItem(at: indexPath) as? TodayMovieCollectionViewCell {
+                let isLiked = UserManager.shared.movieLikeContain(movieID: movieID)
+                cell.movieLikeBtn.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
+                cell.movieLikeBtn.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .highlighted)
+                cell.movieLikeBtn.isSelected = isLiked
+            }
+        }
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
     }
     
     private func configure(){
@@ -68,7 +89,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
             make.top.equalTo(userProfieView.snp.bottom).offset(12)
             make.bottom.equalTo(recentSearchView.recentSearchCollectionView.snp.bottom)
         }
-//        
+        //
         todayMovieView.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(12)
             make.leading.equalToSuperview().offset(12)
@@ -106,7 +127,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         } failHandler: { error in
             print(error.localizedDescription)
         }
-
+        
     }
 }
 
@@ -142,10 +163,20 @@ extension MainViewController{
             }
             
             let data = trendingMovieData[indexPath.item]
-            cell.configureData(data: data)
+            cell.configureData(data: data, likeButtonState: UserManager.shared.movieLikeContain(movieID: data.id))
             return cell
         }
         return UICollectionViewCell()
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
+        guard let cell = collectionView.cellForItem(at: indexPath) as? TodayMovieCollectionViewCell else { return true }
+        
+        let touchLocation = collectionView.panGestureRecognizer.location(in: cell)
+        if cell.movieLikeBtn.frame.contains(touchLocation) {
+            return false
+        }
+        return true
     }
     
     private func recentSearchRemoveAll(){

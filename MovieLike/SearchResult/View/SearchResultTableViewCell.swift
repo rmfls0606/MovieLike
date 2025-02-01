@@ -12,6 +12,7 @@ import Kingfisher
 class SearchResultTableViewCell: BaseTableViewCell {
 
     static let identifier = "SearchResultTableViewCell"
+    private var movieID: Int?
     
     private lazy var searchResultimageView: UIImageView = {
         let view = UIImageView()
@@ -54,11 +55,12 @@ class SearchResultTableViewCell: BaseTableViewCell {
         return stackView
     }()
     
-    private lazy var searchResultLikeBtn: UIButton = {
+    private(set) lazy var searchResultLikeBtn: UIButton = {
         let btn = UIButton()
         btn.setImage(UIImage(systemName: "heart"), for: .normal)
         btn.setImage(UIImage(systemName: "heart"), for: .highlighted)
         btn.tintColor = UIColor(named: "blueColor")
+        btn.addTarget(self, action: #selector(searchResultLikeButtonTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -67,6 +69,13 @@ class SearchResultTableViewCell: BaseTableViewCell {
         self.addSubview(searchResultTitle)
         self.addSubview(searchResultDate)
         self.addSubview(searchFooterView)
+    }
+    
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let result = searchResultLikeBtn.hitTest(convert(point, to: searchResultLikeBtn), with: event) {
+            return result
+        }
+        return super.hitTest(point, with: event)
     }
     
     override func configureLayout() {
@@ -106,12 +115,21 @@ class SearchResultTableViewCell: BaseTableViewCell {
         }
     }
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        self.searchResultLikeBtn.isSelected = false
+        self.searchResultLikeBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+    }
+    
     override func configureView() {
         self.selectionStyle = .none
         self.backgroundColor = .black
     }
     
-    func configureInsertData(data: SearchMovieResult){
+    func configureInsertData(data: SearchMovieResult, likeButtonState: Bool){
+        self.movieID = data.id
+        self.searchResultLikeBtn.isSelected = likeButtonState
+        
         if let poster_path = data.poster_path {
             let poster_image_url = "https://image.tmdb.org/t/p/w400/\(poster_path)"
             self.searchResultimageView.kf.setImage(with: URL(string: poster_image_url))
@@ -149,5 +167,22 @@ class SearchResultTableViewCell: BaseTableViewCell {
             
             self.searchResultGenreStackView.addArrangedSubview(view)
         }
+    }
+    @objc
+    private func searchResultLikeButtonTapped(){
+        guard let movieID = movieID else {return}
+        if searchResultLikeBtn.isSelected{
+            UserManager.shared.removeLikedMovie(movieID: movieID)
+            self.searchResultLikeBtn.setImage(UIImage(systemName: "heart"), for: .normal)
+            self.searchResultLikeBtn.setImage(UIImage(systemName: "heart"), for: .highlighted)
+        }else{
+            UserManager.shared.saveLikeMovie(movieID: movieID)
+            self.searchResultLikeBtn.setImage(UIImage(systemName: "heart.fill"), for: .normal)
+            self.searchResultLikeBtn.setImage(UIImage(systemName: "heart.fill"), for: .highlighted)
+        }
+        
+        self.searchResultLikeBtn.isSelected.toggle()
+        
+        NotificationCenter.default.post(name: Notification.Name("likeButtonClicked"), object: nil, userInfo: ["movieID": movieID])
     }
 }
