@@ -98,7 +98,7 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
         self.backgroundColor = .black
     }
     
-    func configureData(data: TrendingMovie){
+    func configureData(data: SearchMovieResult){
         if let poster_path_url = data.poster_path{
             self.movieImageView.kf.setImage(with: URL(string: "https://image.tmdb.org/t/p/w400/\(poster_path_url)"))
         }

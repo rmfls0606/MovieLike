@@ -10,7 +10,7 @@ import SnapKit
 
 class SearchResultView: BaseView {
 
-    private lazy var searchBar: UISearchBar = {
+    private(set) lazy var searchBar: UISearchBar = {
         let searchBar = UISearchBar()
         searchBar.placeholder = "영화 제목을 검색해주세요"
         searchBar.barTintColor = UIColor(named: "darkGrayColor")

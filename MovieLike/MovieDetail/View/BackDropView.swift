@@ -26,7 +26,6 @@ final class BackDropView: BaseView {
     
     private lazy var openDay: UILabel = {
         let label = UILabel()
-        label.text = "2024-12-24"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 12)
         label.textColor = UIColor(named: "lightGrayColor")
@@ -35,7 +34,6 @@ final class BackDropView: BaseView {
     
     private lazy var likePoint: UILabel = {
         let label = UILabel()
-        label.text = "8.0"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 12)
         label.textColor = UIColor(named: "lightGrayColor")
@@ -44,7 +42,6 @@ final class BackDropView: BaseView {
     
     private lazy var genre: UILabel = {
         let label = UILabel()
-        label.text = "액션, 스릴러, 역사, 전쟁"
         label.textAlignment = .center
         label.font = .systemFont(ofSize: 12)
         label.textColor = UIColor(named: "lightGrayColor")
@@ -175,7 +172,7 @@ final class BackDropView: BaseView {
         
         let attachment = NSTextAttachment()
         attachment.image = UIImage(systemName: imageName)?.withTintColor(.lightGray, renderingMode: .alwaysOriginal)
-        attachment.bounds = CGRect(x: 0, y: 0, width: 12, height: 12)
+        attachment.bounds = CGRect(x: 0, y: -2, width: 12, height: 12)
         attributedString.append(NSAttributedString(attachment: attachment))
         
         let textString = NSAttributedString(

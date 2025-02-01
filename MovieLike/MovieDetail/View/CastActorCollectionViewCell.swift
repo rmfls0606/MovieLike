@@ -17,13 +17,11 @@ final class CastActorCollectionViewCell: BaseCollectionViewCell {
         view.contentMode = .scaleAspectFill
         view.layer.cornerRadius = 25
         view.layer.masksToBounds = true
-        view.image = UIImage(named: "profile_1")
         return view
     }()
     
     private lazy var actorName: UILabel = {
         let label = UILabel()
-        label.text = "김민수"
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = .white
         label.numberOfLines = 1
@@ -32,7 +30,6 @@ final class CastActorCollectionViewCell: BaseCollectionViewCell {
     
     private lazy var sceneName: UILabel = {
         let label = UILabel()
-        label.text = "Ahn Jung-geun"
         label.font = UIFont.systemFont(ofSize: 12)
         label.textColor = UIColor(named: "darkGrayColor")
         label.numberOfLines = 1

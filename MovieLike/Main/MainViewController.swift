@@ -14,7 +14,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private let todayMovieView = TodayMovieView()
     private lazy var emptyView = EmptyView()
     private var recentSearchData: [String] = []
-    private var trendingMovieData: [TrendingMovie] = []
+    private var trendingMovieData: [SearchMovieResult] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -99,7 +99,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     }
     
     private func callTrendingImageRequest(){
-        APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: TrendingResponse) in
+        APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: SearchResponse) in
             print(response)
             self.trendingMovieData = response.results
             self.todayMovieView.reload()
@@ -153,5 +153,21 @@ extension MainViewController{
         self.recentSearchData = []
         self.recentSearchView.reloadData()
         print(UserManager.shared.getRecentSearchName())
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        if collectionView.tag == 0{
+            print("toduch")
+            let nextVC = SearchResultViewController()
+            nextVC.preVCReload = { [weak self] in
+                self?.recentSearchData = UserManager.shared.getRecentSearchName()
+            }
+            nextVC.query = self.recentSearchData[indexPath.item]
+            self.navigationController?.pushViewController(nextVC, animated: true)
+        }else{
+            let nextVC = MovieDetailViewController()
+            nextVC.result = self.trendingMovieData[indexPath.item]
+            self.navigationController?.pushViewController(nextVC, animated: true)
+        }
     }
 }

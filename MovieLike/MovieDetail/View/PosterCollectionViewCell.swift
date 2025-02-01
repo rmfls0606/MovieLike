@@ -17,7 +17,6 @@ final class PosterCollectionViewCell: BaseCollectionViewCell {
         view.layer.cornerRadius = 10
         view.layer.masksToBounds = true
         view.contentMode = .scaleAspectFill
-        view.image = UIImage(named: "profile_4")
         return view
     }()
     

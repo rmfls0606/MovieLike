@@ -37,12 +37,12 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     private let castView = CastView()
     private let posterView = PosterView()
     
-    var navigationTitle: String?
+//    var navigationTitle: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.title = self.navigationTitle
+        self.navigationItem.title = self.result?.title
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: nil)

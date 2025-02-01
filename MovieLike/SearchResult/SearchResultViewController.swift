@@ -16,7 +16,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     private lazy var emptyView = EmptyView()
     private var page = 1
     private var isEnd = false
-    private var query = ""
+    var query = ""
     
     var searchStatus: Bool = false
     
@@ -31,6 +31,14 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         
         self.navigationItem.title = "영화 검색"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        print(query)
+        if !query.isEmpty {
+            self.page = 1
+            searchResultView.searchBar.text = query
+            self.searchStatus = true
+            callBackRequest(query: query, page: 1)
+        }
         
         self.view.addSubview(searchResultView)
         searchResultView.configureDelegate(delegate: self, dataSource: self, preFetching: self)
@@ -96,7 +104,7 @@ extension SearchResultViewController{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextVC = MovieDetailViewController()
-        nextVC.navigationTitle = searchList[indexPath.row].title
+//        nextVC.navigationTitle = searchList[indexPath.row].title
         nextVC.result = searchList[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
