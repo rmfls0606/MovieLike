@@ -12,7 +12,7 @@ enum TheMovieDBRequest{
     case trending
     case search(query: String)
     case image(id: Int)
-    case credit(id: String)
+    case credit(id: Int)
     
     var baseURL: String{
         return "https://api.themoviedb.org/3/"
@@ -27,7 +27,7 @@ enum TheMovieDBRequest{
         case .image(let id):
             return URL(string: baseURL + "movie/\(id)/images")!
         case .credit(let id):
-            return URL(string: baseURL + "movie/\(id)credits?language=ko-KR")!
+            return URL(string: baseURL + "movie/\(id)/credits?language=ko-KR")!
         }
     }
     

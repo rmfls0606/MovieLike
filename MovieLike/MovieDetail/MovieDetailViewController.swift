@@ -17,6 +17,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     
     var result: SearchMovieResult?
     private var backdropImages: [String] = []
+    private var creditList: [Cast] = []
     
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
@@ -72,6 +73,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         
         if let result{
             callRequest(id: result.id)
+            callCastRequest(id: result.id)
             backDropView.configureBackDropInfo(data: result)
             synopsisView.configureContent(text: result.overview)
         }
@@ -125,6 +127,15 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         }
     }
     
+    private func callCastRequest(id: Int){
+        APIManager.shard.callRequest(api: TheMovieDBRequest.credit(id: id)) { (response: CastResponse) in
+            self.creditList = response.cast
+            self.castView.collectionView.reloadData()
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
+    }
+    
     private func textWideButtonTapped(_ sender: UIButton){
         if synopsisView.contentStatus{
             sender.setTitle("More", for: .normal)
@@ -146,7 +157,11 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
 
 extension MovieDetailViewController{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        40
+        if collectionView.tag == 0{
+            return self.creditList.count
+        }else{
+            return 1
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -154,6 +169,8 @@ extension MovieDetailViewController{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastActorCollectionViewCell.identifier, for: indexPath) as? CastActorCollectionViewCell else {
                 return UICollectionViewCell()
             }
+            let data = self.creditList[indexPath.item]
+            cell.configureData(data: data)
             return cell
         }else{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as? PosterCollectionViewCell else {

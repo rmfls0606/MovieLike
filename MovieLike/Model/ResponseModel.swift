@@ -37,3 +37,16 @@ struct BackDropResponse: Decodable {
 struct BackDropsImage: Decodable{
     let file_path: String?
 }
+
+//MARK: - Cast API
+
+struct CastResponse: Decodable {
+    let cast: [Cast]
+}
+
+struct Cast: Decodable {
+    let id: Int
+    let name: String
+    let original_name: String
+    let profile_path: String?
+}
