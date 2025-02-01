@@ -27,3 +27,12 @@ struct SearchResultImage: Decodable {
     let id: Int
     
 }
+
+//MARK: - Image API
+struct BackDropResponse: Decodable {
+    let backdrops: [BackDropsImage]
+}
+
+struct BackDropsImage: Decodable{
+    let file_path: String?
+}

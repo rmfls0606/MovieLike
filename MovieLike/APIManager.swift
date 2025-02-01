@@ -11,7 +11,7 @@ import Foundation
 enum TheMovieDBRequest{
     case trending
     case search(query: String)
-    case image(id: String)
+    case image(id: Int)
     case credit(id: String)
     
     var baseURL: String{

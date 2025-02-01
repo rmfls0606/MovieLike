@@ -15,10 +15,13 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         }
     }
     
+    var movieID: Int?
+    private var backdropImages: [String] = []
+    
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
-        view.alwaysBounceVertical = true // 세로 바운스 활성화
+        view.alwaysBounceVertical = true
         view.isDirectionalLockEnabled = true
         return view
     }()
@@ -28,6 +31,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         view.axis = .vertical
         view.spacing = 24
         view.distribution = .fill
+        view.alignment = .fill
         return view
     }()
     
@@ -44,6 +48,9 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         self.navigationItem.title = self.navigationTitle
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "heart"), style: .plain, target: self, action: nil)
+        self.navigationItem.rightBarButtonItem = rightBarButton
+        
         configure()
     }
     
@@ -52,6 +59,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         self.view.addSubview(scrollView)
         scrollView.addSubview(stackView)
         stackView.addSubview(backDropView)
+
         stackView.addSubview(synopsisView)
         stackView.addSubview(castView)
         castView.configureDelegate(delegate: self, dataSource: self)
@@ -59,9 +67,13 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         stackView.addSubview(posterView)
         posterView.configureDelegate(delegate: self, dataSource: self)
         
+        if let movieID{
+            callRequest(id: movieID)
+        }
+        
         scrollView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.top.equalToSuperview()
             make.bottom.equalToSuperview()
         }
@@ -75,7 +87,6 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
             make.top.leading.trailing.equalToSuperview()
             make.bottom.equalTo(self.backDropView.backDropStackView)
         }
-        backDropView.configureDelegate(delegate: self)
         
         synopsisView.snp.makeConstraints { make in
             make.top.equalTo(backDropView.snp.bottom).offset(24)
@@ -98,12 +109,15 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
             make.bottom.equalToSuperview()
         }
     }
-}
-
-extension MovieDetailViewController{
-    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        let page = Int(scrollView.contentOffset.x / UIScreen.main.bounds.width + 0.5)
-        currentPage = page
+    
+    private func callRequest(id: Int){
+        APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
+            if response.backdrops.isEmpty{ return }
+            self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
+            self.backDropView.insertImage(images: self.backdropImages)
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
     }
     
 }

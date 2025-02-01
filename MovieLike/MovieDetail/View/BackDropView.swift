@@ -7,6 +7,7 @@
 
 import UIKit
 import SnapKit
+import Kingfisher
 
 final class BackDropView: BaseView {
     
@@ -14,19 +15,13 @@ final class BackDropView: BaseView {
         let scrollView = UIScrollView()
         scrollView.isPagingEnabled = true
         scrollView.showsHorizontalScrollIndicator = false
+        scrollView.delegate = self
         return scrollView
     }()
     
-    private(set) lazy var pageControl: UIPageControl = {
-        let pageControl = UIPageControl()
-        pageControl.currentPage = 0
-        pageControl.numberOfPages = 5
-        pageControl.backgroundColor = .clear
-        pageControl.pageIndicatorTintColor = UIColor(named: "lightGrayColor")
-        pageControl.currentPageIndicatorTintColor = .white
-        pageControl.addTarget(self, action: #selector(pageControlPageTapped), for: .valueChanged)
-        pageControl.allowsContinuousInteraction = false
-        return pageControl
+    private lazy var innerView: UIView = {
+        let view = UIView()
+        return view
     }()
     
     private lazy var openDay: UILabel = {
@@ -64,11 +59,38 @@ final class BackDropView: BaseView {
         return view
     }()
     
+    private(set) lazy var pageControl: UIPageControl = {
+        let pageControl = UIPageControl()
+        pageControl.currentPage = 0
+        pageControl.backgroundColor = .clear
+        pageControl.pageIndicatorTintColor = UIColor(named: "lightGrayColor")
+        pageControl.currentPageIndicatorTintColor = .white
+        pageControl.addTarget(self, action: #selector(pageControlPageTapped), for: .valueChanged)
+        return pageControl
+    }()
     
     override func configureHierarchy() {
         self.addSubview(scrollView)
+        scrollView.addSubview(innerView)
         self.addSubview(pageControl)
         self.addSubview(backDropStackView)
+        
+        scrollView.snp.makeConstraints { make in
+            make.top.leading.trailing.equalToSuperview()
+            make.height.equalTo(200)
+        }
+        
+        innerView.snp.makeConstraints { make in
+            make.edges.equalToSuperview()
+            make.height.equalToSuperview()
+        }
+        
+        pageControl.snp.makeConstraints { make in
+            make.bottom.equalTo(scrollView.snp.bottom).offset(-12)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(20)
+        }
+        
         
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
@@ -88,19 +110,52 @@ final class BackDropView: BaseView {
         }
     }
     
-  
-    
-    override func configureView() {
-    }
-    
+    override func configureView() {}
+
     @objc private func pageControlPageTapped(_ sender: UIPageControl) {
         let page = sender.currentPage
-        let offsetX = CGFloat(page) * UIScreen.main.bounds.width
+        let offsetX = CGFloat(page) * scrollView.frame.width
+        
+        if scrollView.contentOffset.x == offsetX{ return }
+        
         scrollView.setContentOffset(CGPoint(x: offsetX, y: 0), animated: true)
     }
     
-    func configureDelegate(delegate: UIScrollViewDelegate){
-        self.scrollView.delegate = delegate
+    func insertImage(images: [String]) {
+        innerView.subviews.forEach { $0.removeFromSuperview() }
+        
+        var previousImageView: UIImageView? = nil
+        
+        for imageName in images {
+            let imageView = UIImageView()
+            imageView.contentMode = .scaleAspectFill
+            imageView.clipsToBounds = true
+            innerView.addSubview(imageView)
+            
+            imageView.snp.makeConstraints { make in
+                make.top.bottom.equalToSuperview()
+                make.width.equalTo(scrollView.snp.width)
+                make.height.equalTo(200)
+                
+                if let previousView = previousImageView {
+                    make.leading.equalTo(previousView.snp.trailing)
+                } else {
+                    make.leading.equalToSuperview()
+                }
+            }
+            
+            previousImageView = imageView
+            
+            DispatchQueue.main.async {
+                imageView.kf.setImage(with: URL(string: imageName))
+            }
+        }
+        
+        previousImageView?.snp.makeConstraints { make in
+            make.trailing.equalToSuperview()
+        }
+        
+        pageControl.numberOfPages = images.count
     }
     
     private func lineView() -> UIView{
@@ -113,5 +168,12 @@ final class BackDropView: BaseView {
             make.height.equalTo(20)
         }
         return view
+    }
+}
+
+extension BackDropView: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        let page = Int(scrollView.contentOffset.x / self.bounds.width + 0.5)
+        pageControl.currentPage = page
     }
 }
