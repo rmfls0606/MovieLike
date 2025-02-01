@@ -13,16 +13,26 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private let recentSearchView = RecentSearchView()
     private let todayMovieView = TodayMovieView()
     private lazy var emptyView = EmptyView()
-    private var recentSearchData: [String]{ UserManager.shared.getRecentSearchName()
+    private var recentSearchData: [String] = []
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.recentSearchData = UserManager.shared.getRecentSearchName()
+        self.recentSearchView.reloadData()
+        self.view.layoutIfNeeded()
+        print(1)
+        print(recentSearchData)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(2)
         configure()
     }
     
     private func configure(){
+        self.recentSearchData = UserManager.shared.getRecentSearchName()
+        self.recentSearchView.reloadData()
         self.view.backgroundColor = .black
         self.navigationItem.title = "오늘의 영화"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
@@ -56,11 +66,11 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
             make.top.equalTo(userProfieView.snp.bottom).offset(12)
             make.bottom.equalTo(recentSearchView.recentSearchCollectionView.snp.bottom)
         }
-        
+//        
         todayMovieView.snp.makeConstraints { make in
             make.top.equalTo(recentSearchView.snp.bottom).offset(12)
             make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview()
+            make.trailing.equalToSuperview().offset(-12)
             make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
@@ -70,6 +80,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         presentVC.editMode = true
         presentVC.onDataUpdated = { [weak self] newData in
             self?.userProfieView.configureData(user: newData)
+            self?.todayMovieView.todayMovieCollectionView.reloadData()
         }
         let navigationVC = UINavigationController(rootViewController: presentVC)
         self.present(navigationVC, animated: true)
@@ -79,7 +90,8 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private func searchButtonTapped(){
         let nextVC = SearchResultViewController()
         nextVC.preVCReload = { [weak self] in
-            self?.recentSearchView.reloadData()
+            self?.recentSearchData = UserManager.shared.getRecentSearchName()
+            
         }
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
@@ -87,9 +99,9 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
 
 extension MainViewController{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        print(recentSearchData.count)
         if !self.recentSearchData.isEmpty{
             self.recentSearchView.recentSearchCollectionView.backgroundView = nil
+            print(recentSearchData.count)
             return recentSearchData.count
         }else{
             self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
@@ -104,7 +116,8 @@ extension MainViewController{
                 return UICollectionViewCell()
             }
             
-            cell.configureText(text: self.recentSearchData[indexPath.item])
+            let data = self.recentSearchData[indexPath.item]
+            cell.configureText(text: data)
             return cell
         }else if collectionView.tag == 1{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayMovieCollectionViewCell.identifier, for: indexPath) as? TodayMovieCollectionViewCell else{
@@ -118,6 +131,8 @@ extension MainViewController{
     
     private func recentSearchRemoveAll(){
         UserManager.shared.removeAllRecentSearchName()
+        self.recentSearchData = []
         self.recentSearchView.reloadData()
+        print(UserManager.shared.getRecentSearchName())
     }
 }

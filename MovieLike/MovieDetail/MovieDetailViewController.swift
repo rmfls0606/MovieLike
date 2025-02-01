@@ -9,11 +9,6 @@ import UIKit
 import SnapKit
 
 final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
-    private var currentPage: Int = 0{
-        didSet{
-            backDropView.pageControl.currentPage = currentPage
-        }
-    }
     
     var result: SearchMovieResult?
     private var backdropImages: [String] = []

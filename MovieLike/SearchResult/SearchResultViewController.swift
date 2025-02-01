@@ -45,7 +45,6 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     }
     
     private func callBackRequest(query: String, page: Int){
-        UserManager.shared.saveRecentSearchName(text: query)
         let parameters = ["page": page]
         APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
             if page == 1{
@@ -56,7 +55,8 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
             
             self.isEnd = page >= response.total_pages
             self.searchResultView.reloadDate()
-            
+              
+            UserManager.shared.saveRecentSearchName(text: query)
             self.preVCReload?()
         } failHandler: { error in
             print(error.localizedDescription)

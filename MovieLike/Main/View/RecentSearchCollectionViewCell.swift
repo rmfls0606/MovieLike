@@ -38,11 +38,6 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureLayout() {
-        contentView.snp.makeConstraints { make in
-            make.edges.equalToSuperview()
-            make.height.equalTo(30)
-        }
-        
         searchTextLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
             make.centerY.equalToSuperview()

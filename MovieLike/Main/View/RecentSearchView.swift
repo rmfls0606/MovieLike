@@ -20,6 +20,13 @@ final class RecentSearchView: BaseView {
         return label
     }()
     
+    private lazy var containerView: UIView = {
+        let view = UIView()
+        view.addSubview(recentTitleLabel)
+        view.addSubview(allRemoveButton)
+        return view
+    }()
+    
     //전체삭제 버튼
     private lazy var allRemoveButton: UIButton = {
         let btn = UIButton()
@@ -37,7 +44,7 @@ final class RecentSearchView: BaseView {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumInteritemSpacing = 6
-        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.estimatedItemSize = CGSize(width: 100, height: 30)
         
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.showsHorizontalScrollIndicator = false
@@ -49,26 +56,31 @@ final class RecentSearchView: BaseView {
     
     
     override func configureHierarchy() {
-        self.addSubview(recentTitleLabel)
-        self.addSubview(allRemoveButton)
+        self.addSubview(containerView)
         self.addSubview(recentSearchCollectionView)
     }
     
     override func configureLayout() {
-        recentTitleLabel.snp.makeConstraints { make in
+        
+        self.containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
             make.top.equalToSuperview()
-            make.bottom.equalTo(recentSearchCollectionView.snp.top).offset(-12)
+            make.height.equalTo(20)
+        }
+        
+        recentTitleLabel.snp.makeConstraints { make in
+            make.leading.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
         allRemoveButton.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalTo(recentSearchCollectionView.snp.top).offset(-12)
+            make.trailing.equalToSuperview()
+            make.centerY.equalToSuperview()
         }
         
         recentSearchCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(recentTitleLabel.snp.bottom).offset(12)
+            make.top.equalTo(containerView.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(30)
         }
@@ -85,11 +97,11 @@ final class RecentSearchView: BaseView {
     
     func reloadData(){
         self.recentSearchCollectionView.reloadData()
+        self.recentSearchCollectionView.layoutIfNeeded()
     }
     
     @objc
     private func removeAllButtonTapped(){
-        print("이상하")
         onButtonTapped?()
     }
 }
