@@ -51,7 +51,6 @@ class APIManager{
         AF.request(api.endpoint, method: api.method, parameters: parameters, headers: api.header)
             .validate(statusCode: 200..<500)
             .responseDecodable(of: T.self){ response in
-//                print(response)
                 switch response.result{
                 case .success(let value):
                     succesHandler(value)

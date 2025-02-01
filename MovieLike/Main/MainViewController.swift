@@ -21,13 +21,10 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.recentSearchData = UserManager.shared.getRecentSearchName()
         self.recentSearchView.reloadData()
         self.view.layoutIfNeeded()
-        print(1)
-        print(recentSearchData)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(2)
         configure()
         NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
     }
@@ -121,7 +118,6 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     
     private func callTrendingImageRequest(){
         APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: SearchResponse) in
-            print(response)
             self.trendingMovieData = response.results
             self.todayMovieView.reload()
         } failHandler: { error in
@@ -136,7 +132,6 @@ extension MainViewController{
         if collectionView.tag == 0{
             if !self.recentSearchData.isEmpty{
                 self.recentSearchView.recentSearchCollectionView.backgroundView = nil
-                print(recentSearchData.count)
                 return recentSearchData.count
             }else{
                 self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
@@ -183,12 +178,10 @@ extension MainViewController{
         UserManager.shared.removeAllRecentSearchName()
         self.recentSearchData = []
         self.recentSearchView.reloadData()
-        print(UserManager.shared.getRecentSearchName())
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0{
-            print("toduch")
             let nextVC = SearchResultViewController()
             nextVC.preVCReload = { [weak self] in
                 self?.recentSearchData = UserManager.shared.getRecentSearchName()

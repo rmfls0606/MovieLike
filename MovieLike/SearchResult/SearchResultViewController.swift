@@ -53,7 +53,6 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         self.navigationItem.title = "영화 검색"
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
-        print(query)
         if !query.isEmpty {
             self.page = 1
             searchResultView.searchBar.text = query
