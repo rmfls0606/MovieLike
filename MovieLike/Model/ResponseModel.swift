@@ -55,3 +55,15 @@ struct Cast: Decodable{
     let original_name: String
     let profile_path: String?
 }
+
+//MARK: - Trending API
+struct TrendingResponse: Decodable{
+    let results: [TrendingMovie]
+}
+
+struct TrendingMovie: Decodable{
+    let id: Int
+    let title: String
+    let poster_path: String?
+    let overview: String
+}

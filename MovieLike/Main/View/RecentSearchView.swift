@@ -63,8 +63,8 @@ final class RecentSearchView: BaseView {
     override func configureLayout() {
         
         self.containerView.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
+            make.leading.equalToSuperview()
+            make.trailing.equalToSuperview()
             make.top.equalToSuperview()
             make.height.equalTo(20)
         }

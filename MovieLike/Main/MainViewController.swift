@@ -14,6 +14,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     private let todayMovieView = TodayMovieView()
     private lazy var emptyView = EmptyView()
     private var recentSearchData: [String] = []
+    private var trendingMovieData: [TrendingMovie] = []
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
@@ -53,6 +54,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.view.addSubview(todayMovieView)
         self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
         
+        callTrendingImageRequest()
         
         userProfieView.snp.makeConstraints { make in
             make.top.equalTo(self.view.safeAreaLayoutGuide).offset(12)
@@ -95,18 +97,33 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         }
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
+    
+    private func callTrendingImageRequest(){
+        APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: TrendingResponse) in
+            print(response)
+            self.trendingMovieData = response.results
+            self.todayMovieView.reload()
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
+
+    }
 }
 
 extension MainViewController{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if !self.recentSearchData.isEmpty{
-            self.recentSearchView.recentSearchCollectionView.backgroundView = nil
-            print(recentSearchData.count)
-            return recentSearchData.count
+        if collectionView.tag == 0{
+            if !self.recentSearchData.isEmpty{
+                self.recentSearchView.recentSearchCollectionView.backgroundView = nil
+                print(recentSearchData.count)
+                return recentSearchData.count
+            }else{
+                self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
+                emptyView.configureData(text: "최근 검색어 내역이 없습니다.")
+                return 0
+            }
         }else{
-            self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
-            emptyView.configureData(text: "최근 검색어 내역이 없습니다.")
-            return 0
+            return trendingMovieData.count
         }
     }
     
@@ -124,6 +141,8 @@ extension MainViewController{
                 return UICollectionViewCell()
             }
             
+            let data = trendingMovieData[indexPath.item]
+            cell.configureData(data: data)
             return cell
         }
         return UICollectionViewCell()

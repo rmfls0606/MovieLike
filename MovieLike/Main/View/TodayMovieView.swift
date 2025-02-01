@@ -45,15 +45,15 @@ final class TodayMovieView: BaseView {
         collectionView.tag = 1
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.collectionViewLayout = createCollectionViewLayout()
-        collectionView.backgroundColor = .green
+        collectionView.backgroundColor = .black
         return collectionView
     }
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
-        let width = (UIScreen.main.bounds.width * 0.6)
-        layout.itemSize = CGSize(width: width, height: 250)
+        let width = (UIScreen.main.bounds.width - 24 - 10) / 1.8
+        layout.estimatedItemSize = CGSize(width: width, height: 330)
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -66,19 +66,19 @@ final class TodayMovieView: BaseView {
     
     override func configureLayout() {
         todayMovieTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview().offset(12)
+            make.leading.equalToSuperview()
             make.top.equalToSuperview()
         }
         
         todayMovieCollectionView.snp.makeConstraints { make in
-            make.top.equalTo(todayMovieTitleLabel.snp.bottom).offset(6)
+            make.top.equalTo(todayMovieTitleLabel.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
     }
     
     override func configureView() {
-        
+        self.backgroundColor = .black
     }
     
     func configureDelegate(delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource){
@@ -86,4 +86,7 @@ final class TodayMovieView: BaseView {
         self.todayMovieCollectionView.dataSource = dataSource
     }
 
+    func reload(){
+        self.todayMovieCollectionView.reloadData()
+    }
 }
