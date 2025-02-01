@@ -173,6 +173,7 @@
 				DEVELOPMENT_TEAM = 643M6R9A8T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieLike/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "이상민";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -207,6 +208,7 @@
 				DEVELOPMENT_TEAM = 643M6R9A8T;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = MovieLike/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = "이상민";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

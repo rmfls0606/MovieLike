@@ -177,5 +177,6 @@ final class UserProfileView: BaseView {
         self.userProfileImageView.image = UIImage(named: user.imageName)
         self.userNicknameLabel.text = user.nickname
         self.userJoinDate.text = "\(user.joinDate) 가입"
+        self.userSavedMovieBoxLabel.text = "\(UserManager.shared.getLikedMovie().count)개의 무비박스 보관중"
     }
 }

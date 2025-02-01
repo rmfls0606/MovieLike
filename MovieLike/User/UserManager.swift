@@ -25,6 +25,17 @@ class UserManager{
     private let userRecentSearchNameKey = "userRecentSearchName"
     private let userlikedMovieKey = "userLikedMovie"
     
+    private var likeMovieList: Set<Int> {
+        get{
+            let savedMovies = defaults.array(forKey: userlikedMovieKey) as? [Int] ?? []
+            return Set(savedMovies)
+        }
+        
+        set {
+            defaults.set(Array(newValue), forKey: userlikedMovieKey)
+        }
+    }
+    
     func saveUserInfo(user: User){
         defaults.set(user.imageName, forKey: userImageKey)
         defaults.set(user.nickname, forKey: userNicknameKey)
@@ -78,28 +89,32 @@ class UserManager{
         defaults.removeObject(forKey: userRecentSearchNameKey)
     }
     
-    func saveLikeMovie(movieID: Int){
-        var likeMovieList = getLikedMovie()
-        if !likeMovieList.contains(movieID){
-            likeMovieList.append(movieID)
-            defaults.set(likeMovieList, forKey: userlikedMovieKey)
+    func removeRecentSearchName(text: String){
+        var searchData = getRecentSearchName()
+        if let index = searchData.firstIndex(of: text){
+            searchData.remove(at: index)
         }
+        defaults.set(searchData, forKey: userRecentSearchNameKey)
+    }
+    
+    func saveLikeMovie(movieID: Int){
+        var likeMovieList = likeMovieList
+        likeMovieList.insert(movieID)
+        self.likeMovieList = likeMovieList
         
     }
     
     func removeLikedMovie(movieID: Int){
-        var likeMovieList = getLikedMovie()
-        if let index = likeMovieList.firstIndex(of: movieID){
-            likeMovieList.remove(at: index)
-            defaults.set(likeMovieList, forKey: userlikedMovieKey)
-        }
+        var likeMovieList = likeMovieList
+        likeMovieList.remove(movieID)
+        self.likeMovieList = likeMovieList
     }
     
     func getLikedMovie() -> [Int]{
-        return defaults.array(forKey: userlikedMovieKey) as? [Int] ?? []
+        return Array(likeMovieList)
     }
     
     func movieLikeContain(movieID: Int) -> Bool{
-        return getLikedMovie().contains(movieID)
+        return likeMovieList.contains(movieID)
     }
 }

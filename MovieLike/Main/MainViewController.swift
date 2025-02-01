@@ -64,6 +64,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         self.view.addSubview(userProfieView)
         userProfieView.onTapGesureClosure = presentViewController
         self.view.addSubview(recentSearchView)
+        
         self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
         self.recentSearchView.onButtonTapped = { [weak self] in
             self?.recentSearchRemoveAll()
