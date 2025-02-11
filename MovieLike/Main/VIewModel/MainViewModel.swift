@@ -7,6 +7,26 @@
 
 import Foundation
 
-class MainViewModel {
+class MainViewModel: BaseViewModel {
+    private(set) var input: Input
+    private(set) var output: Output
     
+    struct Input{
+        
+    }
+    
+    struct Output{
+        
+    }
+    
+    init () {
+        input = Input()
+        output = Output()
+        
+        transform()
+    }
+    
+    func transform() {
+        
+    }
 }
