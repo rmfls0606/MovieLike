@@ -28,6 +28,14 @@ class MainViewModel: BaseViewModel {
     }
     
     func transform() {
-        
+        callTrendingImageRequset()
+    }
+    
+    private func callTrendingImageRequset(){
+        APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: SearchResponse) in
+            self.output.trendingMovieData.value = response.results
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
     }
 }

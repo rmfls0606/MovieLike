@@ -86,8 +86,6 @@ final class MainViewController: UIViewController {
         }
         
         self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
-        
-        callTrendingImageRequest()
     }
     
     private func setBind(){
@@ -141,14 +139,6 @@ final class MainViewController: UIViewController {
             
         }
         self.navigationController?.pushViewController(nextVC, animated: true)
-    }
-    
-    private func callTrendingImageRequest(){
-        APIManager.shard.callRequest(api: TheMovieDBRequest.trending) { (response: SearchResponse) in
-            self.viewModel.output.trendingMovieData.value = response.results
-        } failHandler: { error in
-            print(error.localizedDescription)
-        }
     }
 }
 
