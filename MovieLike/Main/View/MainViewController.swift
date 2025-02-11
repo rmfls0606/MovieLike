@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-final class MainViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource {
+final class MainViewController: UIViewController {
     private let userProfieView = UserProfileView()
     private let recentSearchView = RecentSearchView()
     private let todayMovieView = TodayMovieView()
@@ -152,7 +152,7 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     }
 }
 
-extension MainViewController{
+extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0{
             if !self.viewModel.output.recentSearchData.value.isEmpty{
@@ -160,7 +160,7 @@ extension MainViewController{
                 return viewModel.output.recentSearchData.value.count
             }else{
                 self.recentSearchView.recentSearchCollectionView.backgroundView = emptyView
-                emptyView.configureData(text: "최근 검색어 내역이 없습니다.")
+                self.emptyView.configureData(text: "최근 검색어 내역이 없습니다.")
                 return 0
             }
         }else{
@@ -189,16 +189,6 @@ extension MainViewController{
         return UICollectionViewCell()
     }
     
-    func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        guard let cell = collectionView.cellForItem(at: indexPath) as? TodayMovieCollectionViewCell else { return true }
-        
-        let touchLocation = collectionView.panGestureRecognizer.location(in: cell)
-        if cell.movieLikeBtn.frame.contains(touchLocation) {
-            return false
-        }
-        return true
-    }
-    
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0{
             let nextVC = SearchResultViewController()
@@ -211,6 +201,16 @@ extension MainViewController{
             let nextVC = MovieDetailViewController()
             nextVC.result = self.viewModel.output.trendingMovieData.value[indexPath.item]
             self.navigationController?.pushViewController(nextVC, animated: true)
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        if collectionView.tag == 0{
+            return collectionView.bounds.size
+        }else{
+            let width = (collectionView.bounds.width - 24 - 10) / 1.5
+            let height = collectionView.bounds.height
+            return CGSize(width: width, height: height)
         }
     }
 }

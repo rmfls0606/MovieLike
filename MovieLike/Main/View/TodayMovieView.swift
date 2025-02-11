@@ -19,24 +19,6 @@ final class TodayMovieView: BaseView {
         return label
     }()
     
-//    //오늘의 영화 컬렉션 뷰
-//    private(set) lazy var todayMovieCollectionView: UICollectionView = {
-//        let layout = UICollectionViewFlowLayout()
-//        layout.scrollDirection = .horizontal
-//        layout.minimumInteritemSpacing = 0
-//        layout.minimumLineSpacing = 100
-//        
-//        let width = UIScreen.main.bounds.width * 0.6
-//        layout.itemSize = CGSize(width: width, height: 300)
-//
-//        
-//        let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
-//        collectionView.tag = 1
-//        collectionView.backgroundColor = .blue
-//        collectionView.register(TodayMovieCollectionViewCell.self, forCellWithReuseIdentifier: TodayMovieCollectionViewCell.identifier)
-//        return collectionView
-//    }()
-    
     private(set) lazy var todayMovieCollectionView = createCollectionView()
     
     private func createCollectionView() -> UICollectionView{
@@ -52,8 +34,8 @@ final class TodayMovieView: BaseView {
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = 10
-        let width = (UIScreen.main.bounds.width - 24 - 10) / 1.8
-        layout.estimatedItemSize = CGSize(width: width, height: 330)
+//        let width = (UIScreen.main.bounds.width - 24 - 10) / 1.5
+//        layout.itemSize = CGSize(width: width, height: width * 1.7)
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -72,8 +54,7 @@ final class TodayMovieView: BaseView {
         
         todayMovieCollectionView.snp.makeConstraints { make in
             make.top.equalTo(todayMovieTitleLabel.snp.bottom).offset(12)
-            make.leading.trailing.equalToSuperview()
-            make.bottom.equalToSuperview()
+            make.leading.trailing.bottom.equalToSuperview()
         }
     }
     
@@ -81,7 +62,7 @@ final class TodayMovieView: BaseView {
         self.backgroundColor = .black
     }
     
-    func configureDelegate(delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource){
+    func configureDelegate(delegate: UICollectionViewDelegateFlowLayout, dataSource: UICollectionViewDataSource){
         self.todayMovieCollectionView.delegate = delegate
         self.todayMovieCollectionView.dataSource = dataSource
     }

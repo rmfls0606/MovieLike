@@ -26,7 +26,7 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
     
     private lazy var movieTitle: UILabel = {
         let label = UILabel()
-        label.text = "영화"
+        label.text = "테스트 영화제목입니다. 이 글은 무시하셔도 좋습니다."
         label.textColor = .white
         label.font = .systemFont(ofSize: 16)
         return label
@@ -66,28 +66,30 @@ final class TodayMovieCollectionViewCell: BaseCollectionViewCell {
     override func configureLayout() {
         
         movieImageView.snp.makeConstraints { make in
-            make.top.equalToSuperview()
-            make.width.equalTo(contentView.snp.width)
-            make.height.equalTo(contentView.snp.width).multipliedBy(1.2)
+            make.top.leading.trailing.equalToSuperview()
+            make.bottom.lessThanOrEqualTo(6)
         }
         
         titleAndLikeButtonView.snp.makeConstraints { make in
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(20)
             make.top.equalTo(movieImageView.snp.bottom).offset(6)
+            make.height.equalTo(20)
         }
         
         movieTitle.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.leading.equalToSuperview()
+            make.trailing.equalTo(movieLikeBtn.snp.leading).inset(6)
         }
+        
+        movieTitle.setContentHuggingPriority(.defaultLow, for: .horizontal)
         
         movieLikeBtn.snp.makeConstraints { make in
             make.trailing.equalToSuperview()
             make.centerY.equalToSuperview()
-            make.size.equalTo(20)
-            
         }
+        
+        movieLikeBtn.setContentHuggingPriority(.defaultHigh, for: .horizontal)
         
         movieContents.snp.makeConstraints { make in
             make.top.equalTo(titleAndLikeButtonView.snp.bottom).offset(6)
