@@ -190,6 +190,7 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
                 self?.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
             }
             nextVC.query = self.viewModel.output.recentSearchData.value[indexPath.item]
+            nextVC.viewModel.input.query.value = nextVC.query
             self.navigationController?.pushViewController(nextVC, animated: true)
         }else{
             let nextVC = MovieDetailViewController()
