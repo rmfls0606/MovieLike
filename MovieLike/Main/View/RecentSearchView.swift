@@ -54,14 +54,12 @@ final class RecentSearchView: BaseView {
         return collectionView
     }()
     
-    
     override func configureHierarchy() {
         self.addSubview(containerView)
         self.addSubview(recentSearchCollectionView)
     }
     
     override func configureLayout() {
-        
         self.containerView.snp.makeConstraints { make in
             make.leading.equalToSuperview()
             make.trailing.equalToSuperview()
@@ -69,25 +67,21 @@ final class RecentSearchView: BaseView {
             make.height.equalTo(20)
         }
         
-        recentTitleLabel.snp.makeConstraints { make in
+        self.recentTitleLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
             make.centerY.equalToSuperview()
         }
         
-        allRemoveButton.snp.makeConstraints { make in
-            make.trailing.equalToSuperview()
+        self.allRemoveButton.snp.makeConstraints { make in
+            make.trailing.equalToSuperview().inset(12)
             make.centerY.equalToSuperview()
         }
         
-        recentSearchCollectionView.snp.makeConstraints { make in
+        self.recentSearchCollectionView.snp.makeConstraints { make in
             make.top.equalTo(containerView.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
             make.height.equalTo(30)
         }
-    }
-    
-    override func configureView() {
-        
     }
     
     func configureDelegate(delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource){
@@ -97,7 +91,6 @@ final class RecentSearchView: BaseView {
     
     func reloadData(){
         self.recentSearchCollectionView.reloadData()
-        self.recentSearchCollectionView.layoutIfNeeded()
     }
     
     @objc

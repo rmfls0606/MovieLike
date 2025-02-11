@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     
@@ -49,10 +50,6 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
             make.size.equalTo(10)
             make.centerY.equalToSuperview()
         }
-    }
-    
-    override func configureView() {
-        
     }
     
     func configureText(text: String){

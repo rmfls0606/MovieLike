@@ -25,9 +25,69 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        configure()
         NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
+        setUI()
+        setLayout()
+        setLogic()
         setBind()
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setUI(){
+        self.view.backgroundColor = .black
+        self.navigationItem.title = "오늘의 영화"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
+        rightBarButton.tintColor = UIColor(named: "blueColor")
+        
+        self.navigationItem.rightBarButtonItem = rightBarButton
+        
+        self.view.addSubview(userProfieView)
+        
+        self.view.addSubview(recentSearchView)
+        
+        self.view.addSubview(todayMovieView)
+    }
+    
+    private func setLayout(){
+        userProfieView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide).offset(12)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(self.userProfieView.userProfileView.snp.bottom)
+        }
+        
+        recentSearchView.snp.makeConstraints { make in
+            make.leading.trailing.equalToSuperview()
+            make.top.equalTo(userProfieView.snp.bottom).offset(12)
+            make.bottom.equalTo(recentSearchView.recentSearchCollectionView.snp.bottom)
+        }
+        
+        todayMovieView.snp.makeConstraints { make in
+            make.top.equalTo(recentSearchView.snp.bottom).offset(12)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setLogic(){
+        self.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
+        
+        userProfieView.onTapGesureClosure = presentViewController
+        
+        self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
+        self.recentSearchView.onButtonTapped = { [weak self] in
+            self?.recentSearchRemoveAll()
+        }
+        
+        self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
+        
+        callTrendingImageRequest()
     }
     
     private func setBind(){
@@ -38,6 +98,12 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
         viewModel.output.trendingMovieData.lazyBind { data in
             self.todayMovieView.reloadData()
         }
+    }
+    
+    //MARK: - Actions
+    private func recentSearchRemoveAll(){
+        UserManager.shared.removeAllRecentSearchName()
+        self.viewModel.output.recentSearchData.value = [] //todo: UserManager를 통하여 처리 가능할 것 같다
     }
     
     @objc
@@ -53,57 +119,6 @@ final class MainViewController: UIViewController, UICollectionViewDelegate, UICo
                 cell.movieLikeBtn.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .highlighted)
                 cell.movieLikeBtn.isSelected = isLiked
             }
-        }
-    }
-    
-    deinit{
-        NotificationCenter.default.removeObserver(self)
-    }
-    
-    private func configure(){
-        self.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
-        self.recentSearchView.reloadData()
-        self.view.backgroundColor = .black
-        self.navigationItem.title = "오늘의 영화"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        let rightBarButton = UIBarButtonItem(image: UIImage(systemName: "magnifyingglass"), style: .plain, target: self, action: #selector(searchButtonTapped))
-        rightBarButton.tintColor = UIColor(named: "blueColor")
-        
-        self.navigationItem.rightBarButtonItem = rightBarButton
-        
-        self.view.addSubview(userProfieView)
-        userProfieView.onTapGesureClosure = presentViewController
-        self.view.addSubview(recentSearchView)
-        
-        self.recentSearchView.configureDelegate(delegate: self, dataSource: self)
-        self.recentSearchView.onButtonTapped = { [weak self] in
-            self?.recentSearchRemoveAll()
-        }
-        
-        self.view.addSubview(todayMovieView)
-        self.todayMovieView.configureDelegate(delegate: self, dataSource: self)
-        
-        callTrendingImageRequest()
-        
-        userProfieView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide).offset(12)
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalTo(self.userProfieView.userProfileView.snp.bottom)
-        }
-        
-        recentSearchView.snp.makeConstraints { make in
-            make.leading.trailing.equalToSuperview()
-            make.top.equalTo(userProfieView.snp.bottom).offset(12)
-            make.bottom.equalTo(recentSearchView.recentSearchCollectionView.snp.bottom)
-        }
-        //
-        todayMovieView.snp.makeConstraints { make in
-            make.top.equalTo(recentSearchView.snp.bottom).offset(12)
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
         }
     }
     
@@ -182,12 +197,6 @@ extension MainViewController{
             return false
         }
         return true
-    }
-    
-    private func recentSearchRemoveAll(){
-        UserManager.shared.removeAllRecentSearchName()
-        self.viewModel.output.recentSearchData.value = []
-        self.recentSearchView.reloadData()
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
