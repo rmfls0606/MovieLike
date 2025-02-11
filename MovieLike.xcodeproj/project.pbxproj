@@ -11,12 +11,12 @@
 		7919FA6F2D479CEC00986441 /* Alamofire in Frameworks */ = {isa = PBXBuildFile; productRef = 7919FA6E2D479CEC00986441 /* Alamofire */; };
 		7919FA722D479CF500986441 /* Kingfisher in Frameworks */ = {isa = PBXBuildFile; productRef = 7919FA712D479CF500986441 /* Kingfisher */; };
 		7919FA752D479CFE00986441 /* SnapKit in Frameworks */ = {isa = PBXBuildFile; productRef = 7919FA742D479CFE00986441 /* SnapKit */; };
-		79CFB66A2D4C135A00F218CF /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 79CFB6692D4C135A00F218CF /* Config.xcconfig */; };
+		79A3144C2D5BADF50030801D /* Config.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = 79A3144B2D5BADF50030801D /* Config.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		7919F9F02D47977000986441 /* .gitignore */ = {isa = PBXFileReference; lastKnownFileType = text; path = .gitignore; sourceTree = "<group>"; };
-		79CFB6692D4C135A00F218CF /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		79A3144B2D5BADF50030801D /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 		79F484512D4684A900EED722 /* MovieLike.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieLike.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -58,7 +58,7 @@
 		79F484482D4684A900EED722 = {
 			isa = PBXGroup;
 			children = (
-				79CFB6692D4C135A00F218CF /* Config.xcconfig */,
+				79A3144B2D5BADF50030801D /* Config.xcconfig */,
 				7919F9F02D47977000986441 /* .gitignore */,
 				79F484532D4684A900EED722 /* MovieLike */,
 				79F484522D4684A900EED722 /* Products */,
@@ -145,7 +145,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				79CFB66A2D4C135A00F218CF /* Config.xcconfig in Resources */,
+				79A3144C2D5BADF50030801D /* Config.xcconfig in Resources */,
 				7919F9F12D47977000986441 /* .gitignore in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -235,7 +235,7 @@
 		};
 		79F484672D4684AB00EED722 /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 79CFB6692D4C135A00F218CF /* Config.xcconfig */;
+			baseConfigurationReference = 79A3144B2D5BADF50030801D /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;

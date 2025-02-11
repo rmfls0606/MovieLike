@@ -70,7 +70,7 @@ final class RecentSearchView: BaseView {
         }
         
         recentTitleLabel.snp.makeConstraints { make in
-            make.leading.equalToSuperview()
+            make.leading.equalToSuperview().offset(12)
             make.centerY.equalToSuperview()
         }
         
