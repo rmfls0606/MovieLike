@@ -86,7 +86,7 @@ final class TodayMovieView: BaseView {
         self.todayMovieCollectionView.dataSource = dataSource
     }
 
-    func reload(){
+    func reloadData(){
         self.todayMovieCollectionView.reloadData()
     }
 }

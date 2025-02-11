@@ -16,7 +16,8 @@ class MainViewModel: BaseViewModel {
     }
     
     struct Output{
-        
+        let recentSearchData: Observable<[String]> = Observable([])
+        let trendingMovieData: Observable<[SearchMovieResult]> = Observable([])
     }
     
     init () {
