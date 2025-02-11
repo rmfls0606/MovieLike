@@ -11,6 +11,7 @@ import SnapKit
 class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     
     static let identifier = "RecentSearchCollectionViewCell"
+    var onButtonTapped: (() -> Void)?
     
     //검색어
     private lazy var searchTextLabel: UILabel = {
@@ -26,6 +27,7 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
         let button = UIButton()
         button.setImage(UIImage(systemName: "xmark"), for: .normal)
         button.setImage(UIImage(systemName: "xmark"), for: .highlighted)
+        button.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         button.tintColor = .black
         return button
     }()
@@ -39,12 +41,12 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     }
     
     override func configureLayout() {
-        searchTextLabel.snp.makeConstraints { make in
+        self.searchTextLabel.snp.makeConstraints { make in
             make.leading.equalToSuperview().offset(12)
             make.centerY.equalToSuperview()
         }
         
-        deleteButton.snp.makeConstraints { make in
+        self.deleteButton.snp.makeConstraints { make in
             make.leading.equalTo(searchTextLabel.snp.trailing).offset(6)
             make.trailing.equalToSuperview().offset(-12)
             make.size.equalTo(10)
@@ -52,7 +54,19 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
+        if let result = deleteButton.hitTest(convert(point, to: deleteButton), with: event) {
+            return result
+        }
+        return super.hitTest(point, with: event)
+    }
+    
     func configureText(text: String){
         searchTextLabel.text = text
+    }
+    
+    @objc
+    private func deleteButtonTapped(){
+        self.onButtonTapped?()
     }
 }

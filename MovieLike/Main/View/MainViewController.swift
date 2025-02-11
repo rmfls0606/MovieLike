@@ -176,6 +176,10 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             
             let data = self.viewModel.output.recentSearchData.value[indexPath.item]
             cell.configureText(text: data)
+            cell.onButtonTapped = { [weak self] in
+                UserManager.shared.removeRecentSearchName(text: data)
+                self?.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
+            }
             return cell
         }else if collectionView.tag == 1{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TodayMovieCollectionViewCell.identifier, for: indexPath) as? TodayMovieCollectionViewCell else{
