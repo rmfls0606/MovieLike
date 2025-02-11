@@ -12,11 +12,11 @@ class SearchResultViewModel: BaseViewModel {
     private(set) var output: Output
     
     struct Input{
-        
+        let query: Observable<String?> = Observable(nil)
     }
     
     struct Output{
-
+        let searchResults: Observable<[SearchMovieResult]> = Observable([])
     }
     
     init () {
@@ -27,6 +27,18 @@ class SearchResultViewModel: BaseViewModel {
     }
     
     func transform() {
-     
+        self.input.query.lazyBind { text in
+            self.callRequest()
+        }
+    }
+    
+    private func callRequest() {
+        guard let query = input.query.value else { return }
+        APIManager.shard.callRequest(api: .search(query: query)) { [weak self] (response: SearchResponse) in
+            self?.output.searchResults.value = response.results
+            UserManager.shared.saveRecentSearchName(text: query)
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
     }
 }

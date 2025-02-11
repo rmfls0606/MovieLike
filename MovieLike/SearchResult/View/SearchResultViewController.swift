@@ -12,7 +12,6 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     var preVCReload: (() -> Void)?
     private let searchResultView = SearchResultView()
-    private var searchList = [SearchMovieResult]()
     private lazy var emptyView = EmptyView()
     private var page = 1
     private var isEnd = false
@@ -20,11 +19,49 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     var searchStatus: Bool = false
     
+    let viewModel = SearchResultViewModel()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        configure()
+        setUI()
+        setLayout()
+        setLogic()
+        setBind()
         NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
+    }
+    
+    deinit{
+        NotificationCenter.default.removeObserver(self)
+    }
+    
+    private func setUI(){
+        self.view.backgroundColor = .black
+        
+        self.navigationItem.title = "영화 검색"
+        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        self.view.addSubview(searchResultView)
+    }
+    
+    private func setLayout(){
+        searchResultView.snp.makeConstraints { make in
+            make.top.equalTo(self.view.safeAreaLayoutGuide)
+            make.leading.equalToSuperview().offset(12)
+            make.trailing.equalToSuperview().offset(-12)
+            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
+        }
+    }
+    
+    private func setLogic(){
+        searchResultView.configureDelegate(delegate: self, dataSource: self, preFetching: self)
+        searchResultView.configureSearchBarDelegate(delegate: self)
+    }
+    
+    private func setBind(){
+        viewModel.output.searchResults.bind { [weak self] _ in
+            self?.searchResultView.reloadData()
+        }
     }
     
     @objc
@@ -32,7 +69,7 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         guard let userInfo = notification.userInfo,
               let movieID = userInfo["movieID"] as? Int else { return }
         
-        if let index = searchList.firstIndex(where: {$0.id == movieID}){
+        if let index = viewModel.output.searchResults.value.firstIndex(where: {$0.id == movieID}){
             let indexPath = IndexPath(row: index, section: 0)
             if let cell = searchResultView.searchResultTableView.cellForRow(at: indexPath) as? SearchResultTableViewCell {
                 let isLiked = UserManager.shared.movieLikeContain(movieID: movieID)
@@ -43,58 +80,31 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
         }
     }
     
-    deinit{
-        NotificationCenter.default.removeObserver(self)
-    }
     
-    private func configure(){
-        self.view.backgroundColor = .black
-        
-        self.navigationItem.title = "영화 검색"
-        self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        if !query.isEmpty {
-            self.page = 1
-            searchResultView.searchBar.text = query
-            self.searchStatus = true
-            callBackRequest(query: query, page: 1)
-        }
-        
-        self.view.addSubview(searchResultView)
-        searchResultView.configureDelegate(delegate: self, dataSource: self, preFetching: self)
-        searchResultView.configureSearchBarDelegate(delegate: self)
-        
-        searchResultView.snp.makeConstraints { make in
-            make.top.equalTo(self.view.safeAreaLayoutGuide)
-            make.leading.equalToSuperview().offset(12)
-            make.trailing.equalToSuperview().offset(-12)
-            make.bottom.equalTo(self.view.safeAreaLayoutGuide)
-        }
-    }
     
     private func callBackRequest(query: String, page: Int){
         let parameters = ["page": page]
-        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
-            if page == 1{
-                self.searchList = response.results
-            }else{
-                self.searchList.append(contentsOf: response.results)
-            }
-            
-            self.isEnd = page >= response.total_pages
-            self.searchResultView.reloadDate()
-              
-            UserManager.shared.saveRecentSearchName(text: query)
-            self.preVCReload?()
-        } failHandler: { error in
-            print(error.localizedDescription)
-        }
+//        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
+//            if page == 1{
+//                self.viewModel.output.searchResults.value = response.results
+//            }else{
+//                self.viewModel.output.searchResults.value.append(contentsOf: response.results)
+//            }
+//            
+//            self.isEnd = page >= response.total_pages
+//            self.searchResultView.reloadDate()
+//              
+//            UserManager.shared.saveRecentSearchName(text: query)
+//            self.preVCReload?()
+//        } failHandler: { error in
+//            print(error.localizedDescription)
+//        }
     }
 }
 
 extension SearchResultViewController{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchList.count == 0 {
+        if viewModel.output.searchResults.value.count == 0 {
             if searchStatus{
                 self.searchResultView.searchResultTableView.backgroundView = emptyView
                 emptyView.configureData(text: "원하는 검색결과를 찾지 못했습니다.")
@@ -105,7 +115,7 @@ extension SearchResultViewController{
             self.searchResultView.searchResultTableView.backgroundView = nil
         }
         
-        return searchList.count
+        return viewModel.output.searchResults.value.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -113,7 +123,7 @@ extension SearchResultViewController{
             return UITableViewCell()
         }
         
-        let data = searchList[indexPath.row]
+        let data = viewModel.output.searchResults.value[indexPath.row]
         cell.configureInsertData(data: data, likeButtonState: UserManager.shared.movieLikeContain(movieID: data.id))
         return cell
     }
@@ -124,7 +134,7 @@ extension SearchResultViewController{
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let nextVC = MovieDetailViewController()
-        nextVC.result = searchList[indexPath.row]
+        nextVC.result = viewModel.output.searchResults.value[indexPath.row]
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
@@ -133,10 +143,11 @@ extension SearchResultViewController{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         
-        self.page = 1
-        self.query = searchBar.text!
-        self.searchStatus = true
-        callBackRequest(query: query, page: 1)
+//        self.page = 1
+//        self.query = searchBar.text!
+//        self.searchStatus = true
+        viewModel.input.query.value = searchBar.text
+//        callBackRequest(query: query, page: 1)
         view.endEditing(true)
     }
     
@@ -156,7 +167,7 @@ extension SearchResultViewController{
         guard !isEnd else { return }
         
         for item in indexPaths{
-            if searchList.count - 2 <= item.item{
+            if viewModel.output.searchResults.value.count - 2 <= item.item{
                 self.page += 1
                 callBackRequest(query: query, page: self.page)
                 break

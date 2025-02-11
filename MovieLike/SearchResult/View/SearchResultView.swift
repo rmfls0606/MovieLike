@@ -63,7 +63,7 @@ class SearchResultView: BaseView {
         self.searchBar.delegate = delegate
     }
     
-    func reloadDate(){
+    func reloadData(){
         self.searchResultTableView.reloadData()
     }
 }
