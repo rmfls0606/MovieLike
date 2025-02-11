@@ -84,37 +84,37 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
     
     private func callBackRequest(query: String, page: Int){
         let parameters = ["page": page]
-//        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
-//            if page == 1{
-//                self.viewModel.output.searchResults.value = response.results
-//            }else{
-//                self.viewModel.output.searchResults.value.append(contentsOf: response.results)
-//            }
-//            
-//            self.isEnd = page >= response.total_pages
-//            self.searchResultView.reloadDate()
-//              
-//            UserManager.shared.saveRecentSearchName(text: query)
-//            self.preVCReload?()
-//        } failHandler: { error in
-//            print(error.localizedDescription)
-//        }
+        //        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
+        //            if page == 1{
+        //                self.viewModel.output.searchResults.value = response.results
+        //            }else{
+        //                self.viewModel.output.searchResults.value.append(contentsOf: response.results)
+        //            }
+        //
+        //            self.isEnd = page >= response.total_pages
+        //            self.searchResultView.reloadDate()
+        //
+        //            UserManager.shared.saveRecentSearchName(text: query)
+        //            self.preVCReload?()
+        //        } failHandler: { error in
+        //            print(error.localizedDescription)
+        //        }
     }
 }
 
 extension SearchResultViewController{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if viewModel.output.searchResults.value.count == 0 {
-            if searchStatus{
+        
+        if viewModel.first{
+            self.searchResultView.searchResultTableView.backgroundView = emptyView
+        }else{
+            if viewModel.output.searchResults.value.count == 0 {
                 self.searchResultView.searchResultTableView.backgroundView = emptyView
                 emptyView.configureData(text: "원하는 검색결과를 찾지 못했습니다.")
             }else{
-                self.searchResultView.searchResultTableView.backgroundView = emptyView
+                self.searchResultView.searchResultTableView.backgroundView = nil
             }
-        }else{
-            self.searchResultView.searchResultTableView.backgroundView = nil
         }
-        
         return viewModel.output.searchResults.value.count
     }
     
@@ -143,11 +143,10 @@ extension SearchResultViewController{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
         
-//        self.page = 1
-//        self.query = searchBar.text!
-//        self.searchStatus = true
+        //        self.page = 1
+        //        self.query = searchBar.text!
+        //        self.searchStatus = true
         viewModel.input.query.value = searchBar.text
-//        callBackRequest(query: query, page: 1)
         view.endEditing(true)
     }
     

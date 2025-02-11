@@ -10,6 +10,7 @@ import Foundation
 class SearchResultViewModel: BaseViewModel {
     private(set) var input: Input
     private(set) var output: Output
+    private(set) var first: Bool = true
     
     struct Input{
         let query: Observable<String?> = Observable(nil)
@@ -28,6 +29,7 @@ class SearchResultViewModel: BaseViewModel {
     
     func transform() {
         self.input.query.lazyBind { text in
+            self.first = false
             self.callRequest()
         }
     }
