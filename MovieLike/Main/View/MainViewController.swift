@@ -187,7 +187,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
             self.navigationController?.pushViewController(nextVC, animated: true)
         }else{
             let nextVC = MovieDetailViewController()
-            nextVC.result = self.viewModel.output.trendingMovieData.value[indexPath.item]
+            nextVC.viewModel.input.detailItem.value = viewModel.output.trendingMovieData
+                .value[indexPath.item]
             self.navigationController?.pushViewController(nextVC, animated: true)
         }
     }

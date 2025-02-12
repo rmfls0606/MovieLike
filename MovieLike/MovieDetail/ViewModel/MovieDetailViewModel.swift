@@ -12,11 +12,11 @@ class MovieDetailViewModel: BaseViewModel{
     private(set) var output: Output
     
     struct Input{
-        
+        let detailItem: Observable<SearchMovieResult?> = Observable(nil)
     }
     
     struct Output{
-        
+        let selectedMovieTitle: Observable<String?> = Observable(nil)
     }
     
     init () {
@@ -27,6 +27,11 @@ class MovieDetailViewModel: BaseViewModel{
     }
     
     func transform() {
-        
+        self.input.detailItem.lazyBind { [weak self] data in
+            guard let data = data else {
+                self?.output.selectedMovieTitle.value = "-"
+                return }
+            self?.output.selectedMovieTitle.value = data.title
+        }
     }
 }
