@@ -9,9 +9,6 @@ import UIKit
 import SnapKit
 
 final class MovieDetailViewController: UIViewController, UIScrollViewDelegate{
-    
-    private var posterImages: [String] = []
-    
     private lazy var scrollView: UIScrollView = {
         let view = UIScrollView()
         view.backgroundColor = .black
@@ -153,6 +150,10 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate{
         viewModel.output.castList.lazyBind { [weak self] cast in
             self?.castView.collectionView.reloadData()
         }
+        
+        viewModel.output.posterList.lazyBind { [weak self] poster in
+            self?.posterView.collectionView.reloadData()
+        }
     }
     
     @objc
@@ -209,7 +210,7 @@ extension MovieDetailViewController: UICollectionViewDelegateFlowLayout, UIColle
         if collectionView.tag == 0{
             return self.viewModel.output.castList.value.count
         }else{
-            return self.posterImages.count
+            return self.viewModel.output.posterList.value.count
         }
     }
     
@@ -225,17 +226,25 @@ extension MovieDetailViewController: UICollectionViewDelegateFlowLayout, UIColle
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PosterCollectionViewCell.identifier, for: indexPath) as? PosterCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let data = self.posterImages[indexPath.item]
+            let data = self.viewModel.output.posterList.value[indexPath.item]
             cell.configureInsertImage(imageName: data)
             return cell
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let padding = 10.0
-        let spacing = 12.0
-        let width = (collectionView.bounds.width - (spacing * 2) - (padding * 2)) / 2
-        let height = (collectionView.bounds.height - spacing) / 2
-        return CGSize(width: width, height: height)
+        if collectionView.tag == 0{
+            let padding = 10.0
+            let spacing = 12.0
+            let width = (collectionView.bounds.width - (spacing * 2) - (padding * 2)) / 2
+            let height = (collectionView.bounds.height - spacing) / 2
+            return CGSize(width: width, height: height)
+        }else{
+            let padding = 10.0
+            let spacing = 12.0
+            let width = (UIScreen.main.bounds.width - (spacing * 3) - (padding * 2)) / 4
+            let height = collectionView.bounds.height
+            return CGSize(width: width, height: height)
+        }
     }
 }

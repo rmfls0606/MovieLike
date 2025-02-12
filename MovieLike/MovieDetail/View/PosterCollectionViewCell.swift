@@ -21,7 +21,7 @@ final class PosterCollectionViewCell: BaseCollectionViewCell {
     }()
     
     override func configureHierarchy() {
-        self.addSubview(imageView)
+        self.contentView.addSubview(imageView)
     }
     
     override func configureLayout() {

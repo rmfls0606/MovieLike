@@ -21,6 +21,7 @@ class MovieDetailViewModel: BaseViewModel{
         let syopsisText: Observable<String> = Observable("-")
         let moreAvaliable: Observable<Bool> = Observable(true)
         let castList: Observable<[Cast]> = Observable([])
+        let posterList: Observable<[String]> = Observable([])
     }
     
     init () {
@@ -47,9 +48,7 @@ class MovieDetailViewModel: BaseViewModel{
         APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: detailItem.id)) { [weak self] (response: BackDropResponse) in
             if response.backdrops.isEmpty{ return }
             self?.output.backdropImages.value = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
-//            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
-//            self.posterView.reloadData()
-//            self.backDropView.insertImage(images: self.backdropImages)
+            self?.output.posterList.value = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
         } failHandler: { error in
             print(error.localizedDescription)
         }

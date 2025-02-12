@@ -32,12 +32,7 @@ final class PosterView: BaseView {
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
-        let padding = 10.0
-        let spacing = 12.0
-        layout.minimumLineSpacing = 10
-        
-        let width = (UIScreen.main.bounds.width - (spacing * 2) - (padding * 3)) / 4
-        layout.itemSize = CGSize(width: width, height: 200)
+        layout.minimumLineSpacing = 12
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -55,7 +50,7 @@ final class PosterView: BaseView {
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(title.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(0.4)
         }
     }
     
