@@ -32,14 +32,8 @@ final class CastView: BaseView {
     
     private func createCollectionViewLayout() -> UICollectionViewLayout{
         let layout = UICollectionViewFlowLayout()
-        let padding = 10.0
-        let spacing = 12.0
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        
-        let width = (UIScreen.main.bounds.width - (spacing * 2) - (padding * 2)) / 2
-        layout.itemSize = CGSize(width: width, height: 50)
-//        layout.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layout.minimumLineSpacing = 12
+        layout.minimumInteritemSpacing = 12
         layout.scrollDirection = .horizontal
         return layout
     }
@@ -57,12 +51,11 @@ final class CastView: BaseView {
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(title.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(120)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(0.4)
         }
     }
-
     
-    func configureDelegate(delegate: UICollectionViewDelegate, dataSource: UICollectionViewDataSource){
+    func configureDelegate(delegate: UICollectionViewDelegateFlowLayout, dataSource: UICollectionViewDataSource){
         self.collectionView.delegate = delegate
         self.collectionView.dataSource = dataSource
     }

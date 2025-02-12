@@ -15,7 +15,7 @@ final class CastActorCollectionViewCell: BaseCollectionViewCell {
     private lazy var imageView: UIImageView = {
         let view = UIImageView()
         view.contentMode = .scaleAspectFill
-        view.layer.cornerRadius = 25
+        view.layer.cornerRadius = contentView.bounds.height / 2
         view.layer.masksToBounds = true
         return view
     }()
@@ -45,13 +45,13 @@ final class CastActorCollectionViewCell: BaseCollectionViewCell {
     }()
     
     override func configureHierarchy() {
-        self.addSubview(imageView)
-        self.addSubview(nameStackView)
+        self.contentView.addSubview(imageView)
+        self.contentView.addSubview(nameStackView)
     }
     
     override func configureLayout() {
         self.imageView.snp.makeConstraints { make in
-            make.size.equalTo(50)
+            make.size.equalTo(contentView.snp.height)
             make.leading.equalToSuperview()
             make.top.bottom.equalToSuperview()
         }

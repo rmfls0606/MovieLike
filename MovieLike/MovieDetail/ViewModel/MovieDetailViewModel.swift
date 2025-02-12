@@ -20,6 +20,7 @@ class MovieDetailViewModel: BaseViewModel{
         let backdropImages: Observable<[String]> = Observable([])
         let syopsisText: Observable<String> = Observable("-")
         let moreAvaliable: Observable<Bool> = Observable(true)
+        let castList: Observable<[Cast]> = Observable([])
     }
     
     init () {
@@ -36,11 +37,12 @@ class MovieDetailViewModel: BaseViewModel{
                 return }
             self?.output.selectedMovieTitle.value = data.title
             self?.output.syopsisText.value = data.overview
-            self?.callRequest()
+            self?.callImageRequest()
+            self?.callCastRequest()
         }
     }
     
-    private func callRequest(){
+    private func callImageRequest(){
         guard let detailItem = input.detailItem.value else { return }
         APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: detailItem.id)) { [weak self] (response: BackDropResponse) in
             if response.backdrops.isEmpty{ return }
@@ -48,6 +50,15 @@ class MovieDetailViewModel: BaseViewModel{
 //            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
 //            self.posterView.reloadData()
 //            self.backDropView.insertImage(images: self.backdropImages)
+        } failHandler: { error in
+            print(error.localizedDescription)
+        }
+    }
+    
+    private func callCastRequest(){
+        guard let detailItem = input.detailItem.value else { return }
+        APIManager.shard.callRequest(api: TheMovieDBRequest.credit(id: detailItem.id)) { [weak self] (response: CastResponse) in
+            self?.output.castList.value = response.cast
         } failHandler: { error in
             print(error.localizedDescription)
         }

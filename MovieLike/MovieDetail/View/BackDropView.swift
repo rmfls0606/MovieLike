@@ -65,7 +65,7 @@ final class BackDropView: BaseView {
         pageControl.currentPage = 0
         pageControl.backgroundColor = .clear
         pageControl.pageIndicatorTintColor = UIColor(named: "lightGrayColor")
-        pageControl.currentPageIndicatorTintColor = .red
+        pageControl.currentPageIndicatorTintColor = .white
         pageControl
             .addTarget(
                 self,

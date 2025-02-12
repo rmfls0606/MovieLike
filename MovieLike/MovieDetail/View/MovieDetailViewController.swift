@@ -8,10 +8,8 @@
 import UIKit
 import SnapKit
 
-final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
+final class MovieDetailViewController: UIViewController, UIScrollViewDelegate{
     
-    private var backdropImages: [String] = []
-    private var creditList: [Cast] = []
     private var posterImages: [String] = []
     
     private lazy var scrollView: UIScrollView = {
@@ -40,7 +38,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(updateLikeMovieList), name: Notification.Name("likeButtonClicked"), object: nil)
         setUI()
         setLayout()
@@ -121,10 +119,10 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         castView.configureDelegate(delegate: self, dataSource: self)
         posterView.configureDelegate(delegate: self, dataSource: self)
         
-//        if let result{
-//            callCastRequest(id: result.id)
-//            backDropView.configureBackDropInfo(data: result)
-//        }
+        //        if let result{
+        //            callCastRequest(id: result.id)
+        //            backDropView.configureBackDropInfo(data: result)
+        //        }
     }
     
     private func setBind(){
@@ -150,6 +148,10 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
                 self?.synopsisView.MoreButton.setTitle("Hide", for: .normal)
                 self?.synopsisView.MoreButton.setTitle("Hide", for: .highlighted)
             }
+        }
+        
+        viewModel.output.castList.lazyBind { [weak self] cast in
+            self?.castView.collectionView.reloadData()
         }
     }
     
@@ -183,39 +185,29 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         NotificationCenter.default.post(name: Notification.Name("likeButtonClicked"), object: nil, userInfo: ["movieID": movieID])
     }
     
-//    private func callRequest(id: Int){
-//        APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
-//            if response.backdrops.isEmpty{ return }
-//            self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
-//            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
-//            self.posterView.reloadData()
-//            self.backDropView.insertImage(images: self.backdropImages)
-//        } failHandler: { error in
-//            print(error.localizedDescription)
-//        }
-//    }
-    
-    private func callCastRequest(id: Int){
-        APIManager.shard.callRequest(api: TheMovieDBRequest.credit(id: id)) { (response: CastResponse) in
-            self.creditList = response.cast
-            self.castView.collectionView.reloadData()
-        } failHandler: { error in
-            print(error.localizedDescription)
-        }
-    }
+    //    private func callRequest(id: Int){
+    //        APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
+    //            if response.backdrops.isEmpty{ return }
+    //            self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
+    //            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
+    //            self.posterView.reloadData()
+    //            self.backDropView.insertImage(images: self.backdropImages)
+    //        } failHandler: { error in
+    //            print(error.localizedDescription)
+    //        }
+    //    }
     
     //MARK: - Actions
     @objc
     private func textWideButtonTapped(_ sender: UIButton){
         viewModel.output.moreAvaliable.value.toggle()
     }
-    
 }
 
-extension MovieDetailViewController{
+extension MovieDetailViewController: UICollectionViewDelegateFlowLayout, UICollectionViewDataSource{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView.tag == 0{
-            return self.creditList.count
+            return self.viewModel.output.castList.value.count
         }else{
             return self.posterImages.count
         }
@@ -226,7 +218,7 @@ extension MovieDetailViewController{
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CastActorCollectionViewCell.identifier, for: indexPath) as? CastActorCollectionViewCell else {
                 return UICollectionViewCell()
             }
-            let data = self.creditList[indexPath.item]
+            let data = self.viewModel.output.castList.value[indexPath.item]
             cell.configureData(data: data)
             return cell
         }else{
@@ -237,5 +229,13 @@ extension MovieDetailViewController{
             cell.configureInsertImage(imageName: data)
             return cell
         }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let padding = 10.0
+        let spacing = 12.0
+        let width = (collectionView.bounds.width - (spacing * 2) - (padding * 2)) / 2
+        let height = (collectionView.bounds.height - spacing) / 2
+        return CGSize(width: width, height: height)
     }
 }
