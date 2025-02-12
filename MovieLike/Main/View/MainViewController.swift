@@ -134,10 +134,6 @@ final class MainViewController: UIViewController {
     @objc
     private func searchButtonTapped(){
         let nextVC = SearchResultViewController()
-        nextVC.preVCReload = { [weak self] in
-            self?.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
-            
-        }
         self.navigationController?.pushViewController(nextVC, animated: true)
     }
 }
@@ -186,11 +182,8 @@ extension MainViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if collectionView.tag == 0{
             let nextVC = SearchResultViewController()
-            nextVC.preVCReload = { [weak self] in
-                self?.viewModel.output.recentSearchData.value = UserManager.shared.getRecentSearchName()
-            }
-            nextVC.query = self.viewModel.output.recentSearchData.value[indexPath.item]
-            nextVC.viewModel.input.query.value = nextVC.query
+            nextVC.viewModel.input.query.value = viewModel.output.recentSearchData
+                .value[indexPath.item]
             self.navigationController?.pushViewController(nextVC, animated: true)
         }else{
             let nextVC = MovieDetailViewController()

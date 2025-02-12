@@ -33,8 +33,8 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
     }()
     
     override func configureHierarchy() {
-        self.addSubview(searchTextLabel)
-        self.addSubview(deleteButton)
+        self.contentView.addSubview(searchTextLabel)
+        self.contentView.addSubview(deleteButton)
         self.backgroundColor = .white
         self.layer.cornerRadius = 15
         self.layer.masksToBounds = true
@@ -54,6 +54,7 @@ class RecentSearchCollectionViewCell: BaseCollectionViewCell {
         }
     }
     
+    //contentView에 버튼을 넣으면 이벤트 처리 가능!
     override func hitTest(_ point: CGPoint, with event: UIEvent?) -> UIView? {
         if let result = deleteButton.hitTest(convert(point, to: deleteButton), with: event) {
             return result

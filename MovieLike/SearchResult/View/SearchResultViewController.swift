@@ -10,14 +10,8 @@ import SnapKit
 
 final class SearchResultViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate, UITableViewDataSourcePrefetching {
     
-    var preVCReload: (() -> Void)?
     private let searchResultView = SearchResultView()
     private lazy var emptyView = EmptyView()
-    private var page = 1
-    private var isEnd = false
-    var query = ""
-    
-    var searchStatus: Bool = false
     
     let viewModel = SearchResultViewModel()
     
@@ -79,27 +73,6 @@ final class SearchResultViewController: UIViewController, UITableViewDelegate, U
             }
         }
     }
-    
-    
-    
-    private func callBackRequest(query: String, page: Int){
-        let parameters = ["page": page]
-        //        APIManager.shard.callRequest(api: .search(query: query), parameters: parameters) { (response: SearchResponse) in
-        //            if page == 1{
-        //                self.viewModel.output.searchResults.value = response.results
-        //            }else{
-        //                self.viewModel.output.searchResults.value.append(contentsOf: response.results)
-        //            }
-        //
-        //            self.isEnd = page >= response.total_pages
-        //            self.searchResultView.reloadDate()
-        //
-        //            UserManager.shared.saveRecentSearchName(text: query)
-        //            self.preVCReload?()
-        //        } failHandler: { error in
-        //            print(error.localizedDescription)
-        //        }
-    }
 }
 
 extension SearchResultViewController{
@@ -142,10 +115,6 @@ extension SearchResultViewController{
 extension SearchResultViewController{
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.showsCancelButton = false
-        
-        //        self.page = 1
-        //        self.query = searchBar.text!
-        //        self.searchStatus = true
         viewModel.input.query.value = searchBar.text
         view.endEditing(true)
     }
@@ -163,12 +132,10 @@ extension SearchResultViewController{
 
 extension SearchResultViewController{
     func tableView(_ tableView: UITableView, prefetchRowsAt indexPaths: [IndexPath]) {
-        guard !isEnd else { return }
         
         for item in indexPaths{
             if viewModel.output.searchResults.value.count - 2 <= item.item{
-                self.page += 1
-                callBackRequest(query: query, page: self.page)
+                viewModel.input.page.value += 1
                 break
             }
         }
