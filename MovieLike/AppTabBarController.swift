@@ -16,7 +16,7 @@ final class AppTabBarController: UITabBarController {
     }
     
     private func configureTabBar() {
-        self.view.backgroundColor = .black
+        self.view.backgroundColor = .clear
         let firstVC = UINavigationController(rootViewController: MainViewController())
         
         // TODO: 뷰컨 하나 만들어야 함
@@ -27,7 +27,7 @@ final class AppTabBarController: UITabBarController {
         secondVC.tabBarItem = UITabBarItem(title: "UPCOMING", image: UIImage(systemName: "film.stack"), tag: 1)
         thirdVC.tabBarItem = UITabBarItem(title: "PROFILE", image: UIImage(systemName: "person.circle"), tag: 2)
         
-        self.setViewControllers([firstVC, secondVC, thirdVC], animated: true)
+        self.setViewControllers([firstVC, secondVC, thirdVC], animated: false)
         
         self.tabBar.tintColor = UIColor(named: "blueColor")
         self.tabBar.backgroundColor = .black
