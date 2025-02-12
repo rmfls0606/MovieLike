@@ -48,8 +48,12 @@ final class BackDropView: BaseView {
         return label
     }()
     
+    private lazy var firstLine = lineView()
+    
+    private lazy var secondLine = lineView()
+    
     private(set) lazy var backDropStackView: UIStackView = {
-        let view = UIStackView(arrangedSubviews: [openDay, lineView(), likePoint, lineView(), genre])
+        let view = UIStackView(arrangedSubviews: [openDay, firstLine, likePoint, secondLine, genre])
         view.axis = .horizontal
         view.spacing = 10
         view.distribution = .fill
@@ -61,8 +65,12 @@ final class BackDropView: BaseView {
         pageControl.currentPage = 0
         pageControl.backgroundColor = .clear
         pageControl.pageIndicatorTintColor = UIColor(named: "lightGrayColor")
-        pageControl.currentPageIndicatorTintColor = .white
-        pageControl.addTarget(self, action: #selector(pageControlPageTapped), for: .valueChanged)
+        pageControl.currentPageIndicatorTintColor = .red
+        pageControl
+            .addTarget(
+                self,
+                action: #selector(pageControlPageTapped),
+                for: .valueChanged)
         return pageControl
     }()
     
@@ -71,10 +79,12 @@ final class BackDropView: BaseView {
         scrollView.addSubview(innerView)
         self.addSubview(pageControl)
         self.addSubview(backDropStackView)
-        
+    }
+    
+    override func configureLayout() {
         scrollView.snp.makeConstraints { make in
             make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
+            make.height.equalTo(scrollView.snp.width).multipliedBy(0.6)
         }
         
         innerView.snp.makeConstraints { make in
@@ -82,16 +92,14 @@ final class BackDropView: BaseView {
             make.height.equalToSuperview()
         }
         
-        pageControl.snp.makeConstraints { make in
-            make.bottom.equalTo(scrollView.snp.bottom).offset(-12)
-            make.centerX.equalToSuperview()
-            make.height.equalTo(20)
+        firstLine.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalToSuperview()
         }
         
-        
-        scrollView.snp.makeConstraints { make in
-            make.top.leading.trailing.equalToSuperview()
-            make.height.equalTo(200)
+        secondLine.snp.makeConstraints { make in
+            make.width.equalTo(1)
+            make.height.equalToSuperview()
         }
         
         pageControl.snp.makeConstraints { make in
@@ -103,15 +111,13 @@ final class BackDropView: BaseView {
         backDropStackView.snp.makeConstraints { make in
             make.top.equalTo(scrollView.snp.bottom).offset(12)
             make.centerX.equalToSuperview()
-            make.height.equalTo(20)
         }
     }
     
-    override func configureView() {}
-    
     @objc private func pageControlPageTapped(_ sender: UIPageControl) {
+        print(sender)
         let page = sender.currentPage
-        let offsetX = CGFloat(page) * scrollView.frame.width
+        let offsetX = CGFloat(page) * scrollView.bounds.width
         
         if scrollView.contentOffset.x == offsetX{ return }
         
@@ -132,7 +138,6 @@ final class BackDropView: BaseView {
             imageView.snp.makeConstraints { make in
                 make.top.bottom.equalToSuperview()
                 make.width.equalTo(scrollView.snp.width)
-                make.height.equalTo(200)
                 
                 if let previousView = previousImageView {
                     make.leading.equalTo(previousView.snp.trailing)
@@ -142,10 +147,8 @@ final class BackDropView: BaseView {
             }
             
             previousImageView = imageView
-            
-            DispatchQueue.main.async {
-                imageView.kf.setImage(with: URL(string: imageName))
-            }
+        
+            imageView.kf.setImage(with: URL(string: imageName))
         }
         
         previousImageView?.snp.makeConstraints { make in
@@ -158,12 +161,6 @@ final class BackDropView: BaseView {
     private func lineView() -> UIView{
         let view = UIView()
         view.backgroundColor = UIColor(named: "lightGrayColor")
-        view.layer.cornerRadius = 5
-        view.layer.masksToBounds = true
-        view.snp.makeConstraints { make in
-            make.width.equalTo(1)
-            make.height.equalTo(20)
-        }
         return view
     }
     

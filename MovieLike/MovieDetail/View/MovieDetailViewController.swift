@@ -11,6 +11,7 @@ import SnapKit
 final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, UICollectionViewDelegate, UICollectionViewDataSource{
     
     var result: SearchMovieResult?
+    
     private var backdropImages: [String] = []
     private var creditList: [Cast] = []
     private var posterImages: [String] = []
@@ -36,8 +37,6 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     private let synopsisView = SynopsisView()
     private let castView = CastView()
     private let posterView = PosterView()
-    
-    //    var navigationTitle: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
