@@ -9,11 +9,6 @@ import UIKit
 import SnapKit
 
 final class SynopsisView: BaseView {
-    
-    var contentStatus: Bool = false //접기 true: 펼치기
-    
-    var onButtonTapped: ((UIButton) -> Void)?
-    
     private lazy var title: UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16, weight: .bold)
@@ -30,7 +25,6 @@ final class SynopsisView: BaseView {
         btn.setTitleColor(UIColor(named: "blueColor"), for: .normal)
         btn.setTitleColor(UIColor(named: "blueColor"), for: .highlighted)
         btn.titleLabel?.font = UIFont.systemFont(ofSize: 14, weight: .bold)
-        btn.addTarget(self, action: #selector(contentToggleButtonTapped), for: .touchUpInside)
         return btn
     }()
     
@@ -77,10 +71,5 @@ final class SynopsisView: BaseView {
             make.leading.trailing.equalToSuperview()
             make.bottom.equalToSuperview()
         }
-    }
-    
-    @objc
-    private func contentToggleButtonTapped(_ sender: UIButton){
-        self.onButtonTapped?(sender)
     }
 }

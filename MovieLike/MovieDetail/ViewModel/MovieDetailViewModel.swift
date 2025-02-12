@@ -19,6 +19,7 @@ class MovieDetailViewModel: BaseViewModel{
         let selectedMovieTitle: Observable<String?> = Observable(nil)
         let backdropImages: Observable<[String]> = Observable([])
         let syopsisText: Observable<String> = Observable("-")
+        let moreAvaliable: Observable<Bool> = Observable(true)
     }
     
     init () {

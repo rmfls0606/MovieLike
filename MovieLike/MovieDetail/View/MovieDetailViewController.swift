@@ -117,7 +117,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     }
     
     private func setLogic(){
-        synopsisView.onButtonTapped = textWideButtonTapped
+        synopsisView.MoreButton.addTarget(self, action: #selector(textWideButtonTapped), for: .touchUpInside)
         castView.configureDelegate(delegate: self, dataSource: self)
         posterView.configureDelegate(delegate: self, dataSource: self)
         
@@ -139,6 +139,18 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         viewModel.output.backdropImages.lazyBind { [weak self] imageNames in
             self?.backDropView.insertImage(images: imageNames)
         }
+        
+        viewModel.output.moreAvaliable.lazyBind { [weak self] status in
+            if status{
+                self?.synopsisView.MoreButton.setTitle("More", for: .normal)
+                self?.synopsisView.MoreButton.setTitle("More", for: .highlighted)
+                self?.synopsisView.content.numberOfLines = 3
+            }else{
+                self?.synopsisView.content.numberOfLines = 0
+                self?.synopsisView.MoreButton.setTitle("Hide", for: .normal)
+                self?.synopsisView.MoreButton.setTitle("Hide", for: .highlighted)
+            }
+        }
     }
     
     @objc
@@ -156,6 +168,7 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     
     @objc
     private func rightBarButtonTapped(){
+        
         guard let movieID = viewModel.input.detailItem.value?.id else { return }
         
         if UserManager.shared.movieLikeContain(movieID: movieID) {
@@ -191,21 +204,10 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         }
     }
     
+    //MARK: - Actions
+    @objc
     private func textWideButtonTapped(_ sender: UIButton){
-        if synopsisView.contentStatus{
-            sender.setTitle("More", for: .normal)
-            sender.setTitle("More", for: .highlighted)
-            synopsisView.content.numberOfLines = 3
-        }else{
-            synopsisView.content.numberOfLines = 0
-            sender.setTitle("Hide", for: .normal)
-            sender.setTitle("Hide", for: .highlighted)
-        }
-        
-        synopsisView.contentStatus.toggle()
-        
-        self.view.setNeedsLayout()
-        self.view.layoutIfNeeded()
+        viewModel.output.moreAvaliable.value.toggle()
     }
     
 }
