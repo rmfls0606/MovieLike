@@ -51,7 +51,7 @@ final class CastView: BaseView {
         self.collectionView.snp.makeConstraints { make in
             make.top.equalTo(title.snp.bottom).offset(12)
             make.leading.trailing.equalToSuperview()
-            make.height.equalTo(collectionView.snp.width).multipliedBy(0.4)
+            make.height.equalTo(collectionView.snp.width).multipliedBy(0.3)
         }
     }
     
