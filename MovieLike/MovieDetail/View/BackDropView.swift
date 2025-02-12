@@ -115,7 +115,6 @@ final class BackDropView: BaseView {
     }
     
     @objc private func pageControlPageTapped(_ sender: UIPageControl) {
-        print(sender)
         let page = sender.currentPage
         let offsetX = CGFloat(page) * scrollView.bounds.width
         

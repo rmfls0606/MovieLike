@@ -53,7 +53,6 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
     }
     
     private func setUI(){
-        
         self.navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.white]
         
         let isLiked = UserManager.shared.movieLikeContain(
@@ -123,16 +122,22 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         posterView.configureDelegate(delegate: self, dataSource: self)
         
 //        if let result{
-//            callRequest(id: result.id)
 //            callCastRequest(id: result.id)
 //            backDropView.configureBackDropInfo(data: result)
-//            synopsisView.configureContent(text: result.overview)
 //        }
     }
     
     private func setBind(){
         viewModel.output.selectedMovieTitle.bind { [weak self] text in
             self?.navigationItem.title = text
+        }
+        
+        viewModel.output.syopsisText.bind { [weak self] text in
+            self?.synopsisView.content.text = text
+        }
+        
+        viewModel.output.backdropImages.lazyBind { [weak self] imageNames in
+            self?.backDropView.insertImage(images: imageNames)
         }
     }
     
@@ -165,17 +170,17 @@ final class MovieDetailViewController: UIViewController, UIScrollViewDelegate, U
         NotificationCenter.default.post(name: Notification.Name("likeButtonClicked"), object: nil, userInfo: ["movieID": movieID])
     }
     
-    private func callRequest(id: Int){
-        APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
-            if response.backdrops.isEmpty{ return }
-            self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
-            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
-            self.posterView.reloadData()
-            self.backDropView.insertImage(images: self.backdropImages)
-        } failHandler: { error in
-            print(error.localizedDescription)
-        }
-    }
+//    private func callRequest(id: Int){
+//        APIManager.shard.callRequest(api: TheMovieDBRequest.image(id: id)) { (response: BackDropResponse) in
+//            if response.backdrops.isEmpty{ return }
+//            self.backdropImages = response.backdrops.prefix(5).map{ "https://image.tmdb.org/t/p/w400/\($0.file_path!)" }
+//            self.posterImages = response.posters.map{"https://image.tmdb.org/t/p/w400/\($0.file_path!)"}
+//            self.posterView.reloadData()
+//            self.backDropView.insertImage(images: self.backdropImages)
+//        } failHandler: { error in
+//            print(error.localizedDescription)
+//        }
+//    }
     
     private func callCastRequest(id: Int){
         APIManager.shard.callRequest(api: TheMovieDBRequest.credit(id: id)) { (response: CastResponse) in

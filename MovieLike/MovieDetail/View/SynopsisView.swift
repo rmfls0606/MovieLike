@@ -79,10 +79,6 @@ final class SynopsisView: BaseView {
         }
     }
     
-    func configureContent(text: String){
-        self.content.text = text
-    }
-    
     @objc
     private func contentToggleButtonTapped(_ sender: UIButton){
         self.onButtonTapped?(sender)
